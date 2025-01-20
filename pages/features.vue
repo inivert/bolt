@@ -6,4 +6,4 @@
 
 <script setup lang="ts">
 import FeaturesSection from '~/components/landing/features/FeaturesSection.vue'
-</script> 
+</script>

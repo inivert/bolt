@@ -1,5 +1,5 @@
 <template>
-  <section id="pricing" class="py-20 bg-gray-50" ref="target">
+  <section id="pricing" ref="target" class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
       <!-- Section Header -->
       <div class="mx-auto max-w-3xl text-center">
@@ -68,7 +68,7 @@
                   ? 'bg-white text-primary hover:bg-accent hover:text-white'
                   : 'border-2 border-primary bg-white text-primary hover:bg-primary hover:text-white'
               ]"
-              @click="selectPlan(plan.name)"
+              @click="handlePlanSelection(plan)"
             >
               {{ plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started' }}
             </button>
@@ -93,8 +93,14 @@
 <script setup lang="ts">
 import { useIntersectionObserver, useLocalStorage } from '@vueuse/core'
 import { ref } from 'vue'
+import type { Plan } from '~/types/pricing'
+import { useRouter } from 'vue-router'
+import { onUnmounted } from 'vue'
 
-const plans = ref([
+const router = useRouter()
+const user = useSupabaseUser()
+
+const plans = ref<Plan[]>([
   {
     id: 1,
     name: 'Starter',
@@ -139,20 +145,37 @@ const plans = ref([
   }
 ])
 
-// Use intersection observer for scroll animations
 const target = ref(null)
 const isVisible = ref(false)
 
-useIntersectionObserver(target, ([{ isIntersecting }]) => {
-  if (isIntersecting) {
-    isVisible.value = true
+const handlePlanSelection = (plan: Plan) => {
+  selectPlan(plan.name)
+  if (plan.name === 'Enterprise') {
+    router.push('/contact')
+  } else {
+    if (user.value) {
+      router.push('/dashboard')
+    } else {
+      router.push('/register')
+    }
   }
+}
+
+// Intersection observer setup
+const { stop } = useIntersectionObserver(
+  target,
+  ([{ isIntersecting }]) => {
+    isVisible.value = isIntersecting
+  }
+)
+
+onUnmounted(() => {
+  stop()
 })
 
-// Store selected plan in local storage
-const selectedPlan = useLocalStorage('selected-plan', '')
+const selectedPlan = useLocalStorage<string>('selected-plan', '')
 
-const selectPlan = (planName: string) => {
+function selectPlan(planName: string): void {
   selectedPlan.value = planName
 }
-</script> 
+</script>

@@ -31,18 +31,24 @@
             Nexcode transforms your simple prompts into powerful, context-aware instructions. Perfect for AI coding assistants like Cursor, Bolt, and more. Pay only for what you use.
           </p>
           <div class="mt-8 flex flex-col items-center space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 lg:justify-start">
-            <button class="group inline-flex items-center rounded-full bg-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-primary/25">
-              Start Free Trial
+            <NuxtLink 
+              :to="user ? '/dashboard' : '/register'"
+              class="group inline-flex items-center rounded-full bg-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-primary/25"
+            >
+              {{ user ? 'Go to Dashboard' : 'Get Started Free' }}
               <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
-            </button>
-            <button class="group inline-flex items-center rounded-full border-2 border-primary/10 bg-white/50 px-8 py-3 text-lg font-semibold text-primary backdrop-blur-sm transition-all hover:border-primary hover:bg-primary/5">
+            </NuxtLink>
+            <NuxtLink 
+              to="/how-it-works" 
+              class="group inline-flex items-center rounded-full border-2 border-primary/10 bg-white/50 px-8 py-3 text-lg font-semibold text-primary backdrop-blur-sm transition-all hover:border-primary hover:bg-primary/5"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
               </svg>
               See How It Works
-            </button>
+            </NuxtLink>
           </div>
           
           <!-- Trust Badges -->
@@ -119,5 +125,5 @@
 </template>
 
 <script setup lang="ts">
-// Hero section component logic here
+const user = useSupabaseUser()
 </script> 

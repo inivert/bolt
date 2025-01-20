@@ -1,5 +1,5 @@
 <template>
-  <section id="features" class="py-20" ref="target">
+  <section id="features" ref="target" class="py-20">
     <div class="container mx-auto px-4">
       <!-- Section Header -->
       <div class="mx-auto max-w-3xl text-center">

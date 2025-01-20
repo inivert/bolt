@@ -17,7 +17,9 @@
             <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary text-2xl font-bold text-white">
               1
             </div>
-            <h3 class="mb-4 text-xl font-semibold text-gray-900">Input Your Prompt</h3>
+            <h3 class="mb-4 text-xl font-semibold text-gray-900">
+              Input Your Prompt
+            </h3>
             <p class="text-gray-600">
               Start by entering your basic prompt or uploading a reference image of the design you want to achieve.
             </p>
@@ -28,7 +30,9 @@
             <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-secondary text-2xl font-bold text-white">
               2
             </div>
-            <h3 class="mb-4 text-xl font-semibold text-gray-900">AI Enhancement</h3>
+            <h3 class="mb-4 text-xl font-semibold text-gray-900">
+              AI Enhancement
+            </h3>
             <p class="text-gray-600">
               Our AI analyzes your input and enhances it with context-aware instructions and best practices.
             </p>
@@ -39,7 +43,9 @@
             <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl font-bold text-white">
               3
             </div>
-            <h3 class="mb-4 text-xl font-semibold text-gray-900">Get Results</h3>
+            <h3 class="mb-4 text-xl font-semibold text-gray-900">
+              Get Results
+            </h3>
             <p class="text-gray-600">
               Receive your enhanced prompt along with markdown files containing detailed instructions for your AI assistant.
             </p>
@@ -72,7 +78,9 @@
                     <div class="space-y-8">
                       <!-- Step 1: Initial Input -->
                       <div class="step-animation opacity-0">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">Step 1: User Input</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                          Step 1: User Input
+                        </h3>
                         <div class="rounded-lg bg-gray-50 p-4">
                           <p class="typing-text-1 font-mono text-sm text-gray-600"></p>
                           <div class="mt-2 fade-in-delay">
@@ -85,7 +93,9 @@
 
                       <!-- Step 2: Nexcode Optimization -->
                       <div class="step-animation opacity-0">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">Step 2: Nexcode Enhancement</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                          Step 2: Nexcode Enhancement
+                        </h3>
                         <div class="rounded-lg bg-primary/5 p-4">
                           <p class="typing-text-2 font-mono text-sm text-gray-600 whitespace-pre-line"></p>
                         </div>
@@ -93,7 +103,9 @@
 
                       <!-- Step 3: Technology Selection -->
                       <div class="step-animation opacity-0">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">Step 3: Technology Stack</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                          Step 3: Technology Stack
+                        </h3>
                         <div class="flex flex-wrap gap-2">
                           <span class="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-800">Next.js</span>
                           <span class="rounded-full bg-purple-100 px-3 py-1 text-sm text-purple-800">TypeScript</span>
@@ -104,30 +116,50 @@
 
                       <!-- Step 4: Generated Files -->
                       <div class="step-animation opacity-0">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">Step 4: Generated Files</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                          Step 4: Generated Files
+                        </h3>
                         <div class="space-y-2">
                           <div class="rounded-lg border border-gray-200 p-2">
-                            <p class="font-mono text-sm text-gray-600">📄 project-structure.md</p>
-                            <p class="text-xs text-gray-500 mt-1">Detailed project architecture and folder structure</p>
+                            <p class="font-mono text-sm text-gray-600">
+                              📄 project-structure.md
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">
+                              Detailed project architecture and folder structure
+                            </p>
                           </div>
                           <div class="rounded-lg border border-gray-200 p-2">
-                            <p class="font-mono text-sm text-gray-600">📄 development-flow.md</p>
-                            <p class="text-xs text-gray-500 mt-1">Step-by-step development flow chart process and guidelines</p>
+                            <p class="font-mono text-sm text-gray-600">
+                              📄 development-flow.md
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">
+                              Step-by-step development flow chart process and guidelines
+                            </p>
                           </div>
                           <div class="rounded-lg border border-gray-200 p-2">
-                            <p class="font-mono text-sm text-gray-600">📄 ai-instructions.md</p>
-                            <p class="text-xs text-gray-500 mt-1">Optimized prompts for AI pair programming</p>
+                            <p class="font-mono text-sm text-gray-600">
+                              📄 ai-instructions.md
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">
+                              Optimized prompts for AI pair programming
+                            </p>
                           </div>
                           <div class="rounded-lg border border-gray-200 p-2">
-                            <p class="font-mono text-sm text-gray-600">📄 user-instructions.md</p>
-                            <p class="text-xs text-gray-500 mt-1">Clear instructions for implementing the solution</p>
+                            <p class="font-mono text-sm text-gray-600">
+                              📄 user-instructions.md
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1">
+                              Clear instructions for implementing the solution
+                            </p>
                           </div>
                         </div>
                       </div>
 
                       <!-- Step 5: Final Step -->
                       <div class="step-animation opacity-0">
-                        <h3 class="mb-2 text-lg font-semibold text-gray-900">Step 5: Ready for Development</h3>
+                        <h3 class="mb-2 text-lg font-semibold text-gray-900">
+                          Step 5: Ready for Development
+                        </h3>
                         <div class="rounded-lg bg-green-50 p-4">
                           <p class="text-sm text-green-800">
                             ✨ All set! Share these files with your AI assistant and start coding!
@@ -165,7 +197,7 @@ const typeText = (element: HTMLElement, text: string, speed: number = 50) => {
 
 // Initialize typing animations
 onMounted(() => {
-  const text1 = "Create a modern e-commerce website"
+  const text1 = 'Create a modern e-commerce website'
   const text2 = `Create a responsive e-commerce platform with:
 - Modern UI components
 - Product filtering system
@@ -175,12 +207,12 @@ onMounted(() => {
 
   setTimeout(() => {
     const element1 = document.querySelector('.typing-text-1')
-    if (element1) typeText(element1 as HTMLElement, text1, 70)
+    if (element1) { typeText(element1 as HTMLElement, text1, 70) }
   }, 2000)
 
   setTimeout(() => {
     const element2 = document.querySelector('.typing-text-2')
-    if (element2) typeText(element2 as HTMLElement, text2, 50)
+    if (element2) { typeText(element2 as HTMLElement, text2, 50) }
   }, 5000)
 })
 </script>
@@ -242,4 +274,4 @@ onMounted(() => {
 html {
   scroll-behavior: smooth;
 }
-</style> 
+</style>

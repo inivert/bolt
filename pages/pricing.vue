@@ -6,4 +6,4 @@
 
 <script setup lang="ts">
 import PricingSection from '~/components/landing/pricing/PricingSection.vue'
-</script> 
+</script>
