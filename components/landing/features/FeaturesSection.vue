@@ -91,7 +91,7 @@ const target = ref(null)
 const isVisible = ref(false)
 
 // Use intersection observer to trigger animation when section is in view
-useIntersectionObserver(target, ([{ isIntersecting }]) => {
+useIntersectionObserver(target, ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
   if (isIntersecting) {
     isVisible.value = true
   }

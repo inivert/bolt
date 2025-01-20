@@ -162,12 +162,11 @@ const handlePlanSelection = (plan: Plan) => {
 }
 
 // Intersection observer setup
-const { stop } = useIntersectionObserver(
-  target,
-  ([{ isIntersecting }]) => {
-    isVisible.value = isIntersecting
+useIntersectionObserver(target, ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
+  if (isIntersecting) {
+    isVisible.value = true
   }
-)
+})
 
 onUnmounted(() => {
   stop()

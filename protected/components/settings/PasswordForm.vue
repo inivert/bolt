@@ -82,13 +82,13 @@
 <script setup lang="ts">
 import Notification from '~/protected/components/common/Notification.vue'
 
-const { supabase } = useSupabaseClient()
+const supabase = useSupabaseClient()
 const loading = ref(false)
 const error = ref<string | null>(null)
 
 const notification = reactive({
   show: false,
-  type: 'success' as const,
+  type: 'success' as 'success' | 'error',
   title: '',
   message: ''
 })
@@ -144,9 +144,10 @@ const handleSubmit = async () => {
 
     resetForm()
     showNotification('success', 'Password updated successfully')
-  } catch (err: any) {
-    error.value = err.message
-    showNotification('error', 'Failed to update password', err.message)
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    error.value = errorMessage
+    showNotification('error', 'Failed to update password', errorMessage)
     console.error('Error updating password:', err)
   } finally {
     loading.value = false

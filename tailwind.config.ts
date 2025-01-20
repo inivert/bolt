@@ -3,56 +3,56 @@ import typography from '@tailwindcss/typography'
 import forms from '@tailwindcss/forms'
 
 export default {
-  content: [
-    './components/**/*.{js,vue,ts}',
-    './layouts/**/*.vue',
-    './pages/**/*.vue',
-    './plugins/**/*.{js,ts}',
-    './app.vue',
-    './error.vue'
-  ],
   darkMode: 'class',
+  content: [
+    'components/**/*.{vue,js,ts}',
+    'layouts/**/*.vue',
+    'pages/**/*.vue',
+    'protected/**/*.vue',
+    'plugins/**/*.{js,ts}',
+    'app.vue'
+  ],
   theme: {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#5B21B6', // Deep purple
-          50: '#EDE9F6',
-          100: '#DCD4F0',
-          200: '#B9A9E3',
-          300: '#967FD6',
-          400: '#7354C9',
-          500: '#5B21B6',
-          600: '#4A1B92',
-          700: '#38156E',
-          800: '#270E4A',
-          900: '#150826'
+          '50': '#f0f9ff',
+          '100': '#e0f2fe',
+          '200': '#bae6fd',
+          '300': '#7dd3fc',
+          '400': '#38bdf8',
+          '500': '#0ea5e9',
+          '600': '#0284c7',
+          '700': '#0369a1',
+          '800': '#075985',
+          '900': '#0c4a6e',
+          '950': '#082f49',
         },
         secondary: {
-          DEFAULT: '#60A5FA', // Electric soft blue
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          200: '#BFDBFE',
-          300: '#93C5FD',
-          400: '#60A5FA',
-          500: '#3B82F6',
-          600: '#2563EB',
-          700: '#1D4ED8',
-          800: '#1E40AF',
-          900: '#1E3A8A'
+          '50': '#f5f3ff',
+          '100': '#ede9fe',
+          '200': '#ddd6fe',
+          '300': '#c4b5fd',
+          '400': '#a78bfa',
+          '500': '#8b5cf6',
+          '600': '#7c3aed',
+          '700': '#6d28d9',
+          '800': '#5b21b6',
+          '900': '#4c1d95',
+          '950': '#2e1065',
         },
         accent: {
-          DEFAULT: '#4ADE80', // Mint green
-          50: '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#4ADE80',
-          500: '#22C55E',
-          600: '#16A34A',
-          700: '#15803D',
-          800: '#166534',
-          900: '#14532D'
+          '50': '#fdf2f8',
+          '100': '#fce7f3',
+          '200': '#fbcfe8',
+          '300': '#f9a8d4',
+          '400': '#f472b6',
+          '500': '#ec4899',
+          '600': '#db2777',
+          '700': '#be185d',
+          '800': '#9d174d',
+          '900': '#831843',
+          '950': '#500724',
         }
       },
       animation: {
@@ -81,5 +81,5 @@ export default {
       }
     }
   },
-  plugins: [typography, forms],
+  plugins: [typography, forms]
 } satisfies Config

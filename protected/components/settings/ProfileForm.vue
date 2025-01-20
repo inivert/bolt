@@ -83,7 +83,7 @@ const error = ref<string | null>(null)
 
 const notification = reactive({
   show: false,
-  type: 'success' as const,
+  type: 'success' as 'success' | 'error',
   title: '',
   message: ''
 })
@@ -140,9 +140,10 @@ const handleSubmit = async () => {
     if (updateError) throw updateError
 
     showNotification('success', 'Profile updated successfully')
-  } catch (err: { message: string }) {
-    error.value = err.message
-    showNotification('error', 'Failed to update profile', err.message)
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+    error.value = errorMessage
+    showNotification('error', 'Failed to update profile', errorMessage)
     console.error('Error updating profile:', err)
   } finally {
     loading.value = false

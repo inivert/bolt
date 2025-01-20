@@ -92,8 +92,8 @@ const emit = defineEmits<{
 }>()
 
 const progress = ref(100)
-let timer: NodeJS.Timeout | null = null
-let progressInterval: NodeJS.Timeout | null = null
+let timer: ReturnType<typeof setTimeout> | null = null
+let progressInterval: ReturnType<typeof setTimeout> | null = null
 
 const playNotificationSound = () => {
   if (!props.playSound) return

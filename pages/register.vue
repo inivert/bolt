@@ -40,7 +40,8 @@ const handleRegister = async () => {
     // Redirect to get-started page after successful registration
     navigateTo('/get-started')
   } catch (e) {
-    error.value = e.message
+    const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred'
+    error.value = errorMessage
   } finally {
     loading.value = false
   }
