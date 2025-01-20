@@ -1,0 +1,7 @@
+# Clear the Nuxt cache and node_modules
+rm -rf node_modules
+rm -rf .nuxt
+rm -rf .output
+
+# Reinstall dependencies
+pnpm install 
