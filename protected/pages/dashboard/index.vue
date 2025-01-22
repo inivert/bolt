@@ -15,51 +15,29 @@
       <!-- Mobile stats -->
       <div class="px-4 py-6 space-y-6">
         <div class="grid grid-cols-1 gap-4">
-          <StatsCard
-            title="Total Projects"
-            :value="totalProjects"
-            color="blue"
-            :change="projectsChange"
-            :changeType="projectsChangeType"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </template>
-            <template #footer>
-              <NuxtLink to="/dashboard/projects" class="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center gap-1">
-                View all projects
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <template v-for="card in statsCards" :key="card.title">
+            <StatsCard
+              :title="card.title"
+              :value="card.value"
+              :color="card.color"
+              :change="card.change"
+              :change-type="card.changeType"
+            >
+              <template #icon>
+                <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
                 </svg>
-              </NuxtLink>
-            </template>
-          </StatsCard>
-
-          <StatsCard
-            title="Active Projects"
-            :value="activeProjects"
-            color="green"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </template>
-          </StatsCard>
-
-          <StatsCard
-            title="Completed Projects"
-            :value="completedProjects"
-            color="purple"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-            </template>
-          </StatsCard>
+              </template>
+              <template v-if="card.footer" #footer>
+                <NuxtLink :to="card.footer.link" :class="`text-sm font-medium text-${card.iconColor}-600 hover:text-${card.iconColor}-500 flex items-center gap-1`">
+                  {{ card.footer.text }}
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </NuxtLink>
+              </template>
+            </StatsCard>
+          </template>
         </div>
 
         <!-- Mobile quick actions -->
@@ -116,51 +94,29 @@
 
         <!-- Stats grid -->
         <div class="grid grid-cols-3 gap-6">
-          <StatsCard
-            title="Total Projects"
-            :value="totalProjects"
-            color="blue"
-            :change="projectsChange"
-            :changeType="projectsChangeType"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </template>
-            <template #footer>
-              <NuxtLink to="/dashboard/projects" class="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center gap-1">
-                View all projects
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <template v-for="card in statsCards" :key="card.title">
+            <StatsCard
+              :title="card.title"
+              :value="card.value"
+              :color="card.color"
+              :change="card.change"
+              :change-type="card.changeType"
+            >
+              <template #icon>
+                <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
                 </svg>
-              </NuxtLink>
-            </template>
-          </StatsCard>
-
-          <StatsCard
-            title="Active Projects"
-            :value="activeProjects"
-            color="green"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </template>
-          </StatsCard>
-
-          <StatsCard
-            title="Completed Projects"
-            :value="completedProjects"
-            color="purple"
-          >
-            <template #icon>
-              <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-            </template>
-          </StatsCard>
+              </template>
+              <template v-if="card.footer" #footer>
+                <NuxtLink :to="card.footer.link" :class="`text-sm font-medium text-${card.iconColor}-600 hover:text-${card.iconColor}-500 flex items-center gap-1`">
+                  {{ card.footer.text }}
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </NuxtLink>
+              </template>
+            </StatsCard>
+          </template>
         </div>
 
         <div class="grid grid-cols-3 gap-6">
@@ -226,6 +182,39 @@ const hasActivity = ref(false)
 const projectsChange = ref('0%')
 const projectsChangeType = ref<'increase' | 'decrease'>('increase')
 
+const LOADING_DELAY_MS = 1000
+
+// Stats card configurations for reuse
+const statsCards = [
+  {
+    title: 'Total Projects',
+    value: totalProjects,
+    color: 'blue',
+    change: projectsChange,
+    changeType: projectsChangeType,
+    icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2M7 7h10',
+    iconColor: 'blue',
+    footer: {
+      text: 'View all projects',
+      link: '/dashboard/projects'
+    }
+  },
+  {
+    title: 'Active Projects',
+    value: activeProjects,
+    color: 'green',
+    icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+    iconColor: 'green'
+  },
+  {
+    title: 'Completed Projects',
+    value: completedProjects,
+    color: 'purple',
+    icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+    iconColor: 'purple'
+  }
+]
+
 const userName = computed(() => {
   const fullName = user.value?.user_metadata?.full_name
   const email = user.value?.email
@@ -237,7 +226,7 @@ const userName = computed(() => {
   if (email) {
     const username = email.split('@')[0]
     // Capitalize first letter and remove numbers for a more personal feel
-    return username.charAt(0).toUpperCase() + username.slice(1).replace(/[0-9]/g, '')
+    return username.charAt(0).toUpperCase() + username.slice(1).replace(/\d/g, '')
   }
   return 'User'
 })
@@ -246,6 +235,6 @@ const userName = computed(() => {
 onMounted(() => {
   setTimeout(() => {
     loading.value = false
-  }, 1000)
+  }, LOADING_DELAY_MS)
 })
 </script>

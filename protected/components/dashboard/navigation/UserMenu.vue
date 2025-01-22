@@ -145,7 +145,7 @@ const userName = computed(() => {
   if (email) {
     const username = email.split('@')[0]
     // Capitalize first letter and remove numbers for a more personal feel
-    return username.charAt(0).toUpperCase() + username.slice(1).replace(/[0-9]/g, '')
+    return username.charAt(0).toUpperCase() + username.slice(1).replace(/\d/g, '')
   }
   return 'User'
 })

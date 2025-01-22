@@ -1,6 +1,6 @@
 <template>
   <div class="relative">
-    <form @submit.prevent="handleSubmit" class="space-y-6">
+    <form class="space-y-6" @submit.prevent="handleSubmit">
       <div>
         <label for="full_name" class="block text-sm font-medium text-gray-700">Full Name</label>
         <input

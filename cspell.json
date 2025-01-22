@@ -1,0 +1,32 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "nuxt",
+    "nuxtjs",
+    "pnpm",
+    "supabase",
+    "tailwindcss",
+    "heroicons",
+    "formkit",
+    "vueuse",
+    "headlessui",
+    "stylelint",
+    "typecheck",
+    "composables",
+    "toastification",
+    "autoanimate",
+    "shadcn",
+    "Nexcode",
+    "pkce",
+    "signup"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
+    ".nuxt/**",
+    "package.json",
+    "pnpm-lock.yaml"
+  ]
+} 

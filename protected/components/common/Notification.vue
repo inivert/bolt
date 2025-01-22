@@ -76,12 +76,13 @@ interface Props {
   show: boolean
   type: NotificationType
   title: string
-  message?: string
+  message: string
   duration?: number
   playSound?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  message: '',
   duration: 5000,
   playSound: true
 })

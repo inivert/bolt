@@ -6,4 +6,9 @@
 
 <script setup lang="ts">
 import FeaturesSection from '~/components/landing/features/FeaturesSection.vue'
+
+definePageMeta({
+  layout: 'default',
+  middleware: []
+})
 </script>

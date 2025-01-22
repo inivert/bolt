@@ -136,8 +136,7 @@ import { ref } from 'vue'
 import { useSupabaseClient } from '#imports'
 
 definePageMeta({
-  layout: 'default',
-  middleware: 'guest'
+  layout: 'default'
 })
 
 const email = ref('')

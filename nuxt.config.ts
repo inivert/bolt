@@ -1,5 +1,9 @@
 import { resolve } from 'path'
 
+// Constants for configuration
+const COOKIE_MAX_AGE_HOURS = 8
+const COOKIE_MAX_AGE_SECONDS = COOKIE_MAX_AGE_HOURS * 60 * 60
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
@@ -45,10 +49,10 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
-      exclude: ['/register', '/login', '/confirm', '/reset-password']
+      exclude: ['/', '/register', '/login', '/confirm', '/reset-password', '/features', '/pricing', '/how-it-works', '/about', '/blog', '/contact', '/privacy', '/terms']
     },
     cookieOptions: {
-      maxAge: 60 * 60 * 8,
+      maxAge: COOKIE_MAX_AGE_SECONDS,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax'
     },
@@ -68,7 +72,7 @@ export default defineNuxtConfig({
       pages.splice(0, pages.length, ...filteredPages)
 
       // Add protected dashboard routes
-      pages.push(
+      const dashboardPages = [
         {
           name: 'dashboard',
           path: '/dashboard',
@@ -83,8 +87,15 @@ export default defineNuxtConfig({
           name: 'dashboard-settings',
           path: '/dashboard/settings',
           file: resolve(__dirname, './protected/pages/dashboard/settings.vue')
+        },
+        {
+          name: 'dashboard-generate',
+          path: '/dashboard/generate',
+          file: resolve(__dirname, './protected/pages/dashboard/generate/index.vue')
         }
-      )
+      ]
+
+      pages.push(...dashboardPages)
     }
   },
   components: [
@@ -119,5 +130,12 @@ export default defineNuxtConfig({
         'app.vue'
       ]
     }
-  }
+  },
+  runtimeConfig: {
+    n8nBaseUrl: process.env.N8N_BASE_URL,
+    n8nWebhookPath: process.env.N8N_WEBHOOK_PATH,
+    public: {
+      // ... other public config ...
+    }
+  },
 })

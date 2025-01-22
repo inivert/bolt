@@ -1,20 +1,23 @@
 <template>
   <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
-      <nav class="container mx-auto px-6 h-16 flex items-center justify-between">
+    <header class="fixed w-full top-0 z-50 bg-gradient-to-r from-white/90 to-primary-50/20 backdrop-blur-md border-b border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md">
+      <nav class="container mx-auto px-6 h-20 flex items-center justify-between">
         <div class="flex items-center space-x-8">
-          <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent hover:opacity-90 transition-opacity">
-            Nexcode
+          <NuxtLink to="/" class="flex items-center space-x-2 hover:opacity-90 transition-opacity">
+            <img src="/logo.svg" alt="Nexcode Logo" class="h-8 w-auto" />
+            <span class="text-2xl font-bold bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent">
+              Nexcode
+            </span>
           </NuxtLink>
           <div class="hidden md:flex items-center space-x-6">
-            <NuxtLink to="/features" class="text-gray-600 hover:text-primary font-medium transition-colors duration-200">
-              Features
-            </NuxtLink>
-            <NuxtLink to="/pricing" class="text-gray-600 hover:text-primary font-medium transition-colors duration-200">
-              Pricing
-            </NuxtLink>
-            <NuxtLink to="/how-it-works" class="text-gray-600 hover:text-primary font-medium transition-colors duration-200">
-              How it Works
+            <NuxtLink
+              v-for="(link, index) in navLinks"
+              :key="index"
+              :to="link.to"
+              class="relative text-gray-600 hover:text-primary font-medium transition-colors duration-200 group"
+            >
+              {{ link.text }}
+              <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
             </NuxtLink>
           </div>
         </div>
@@ -26,9 +29,9 @@
               </NuxtLink>
               <div class="h-6 w-px bg-gray-200" />
               <button
-                @click="handleSignOut"
                 :disabled="isSigningOut"
                 class="text-gray-600 hover:text-primary font-medium transition-colors duration-200 flex items-center disabled:opacity-50"
+                @click="handleSignOut"
               >
                 <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -56,10 +59,10 @@
       <slot />
     </main>
 
-    <footer class="bg-white border-t border-gray-100 mt-20">
+    <footer class="bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 mt-20">
       <div class="container mx-auto px-4">
-        <div class="bg-gray-50/50 rounded-2xl p-12 shadow-sm backdrop-blur-sm">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="bg-gradient-to-br from-white/50 to-primary-50/10 rounded-2xl p-12 shadow-sm backdrop-blur-sm">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="space-y-4">
               <h3 class="text-xl font-bold bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent">
                 Nexcode
@@ -74,8 +77,12 @@
               </h4>
               <ul class="space-y-2">
                 <li>
-                  <NuxtLink to="/features" class="text-gray-600 hover:text-primary transition-colors duration-200">
+                  <NuxtLink
+                    to="/features"
+                    class="relative text-gray-600 hover:text-primary transition-colors duration-200 group"
+                  >
                     Features
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
                   </NuxtLink>
                 </li>
                 <li>
@@ -141,9 +148,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+
+const navLinks = [
+  { to: '/features', text: 'Features' },
+  { to: '/pricing', text: 'Pricing' },
+  { to: '/how-it-works', text: 'How it Works' }
+]
 import type { AuthError } from '@supabase/supabase-js'
 import { useSupabaseClient, useSupabaseUser } from '#imports'
 import { useRouter } from '#imports'
+
+definePageMeta({
+  layout: 'default'
+})
 
 const user = useSupabaseUser()
 const supabase = useSupabaseClient()

@@ -22,17 +22,20 @@
           class="relative rounded-2xl p-8 transition-all hover:shadow-xl"
           :class="[
             plan.popular ? 'bg-primary' : 'bg-white',
-            { 'opacity-0 translate-y-4': !isVisible, 'opacity-100 translate-y-0 shadow-lg': isVisible }
+            'shadow-lg'
           ]"
-          :style="{ transitionDelay: `${plan.id * 100}ms` }"
+          :style="{ transitionDelay: `${plan.id * ANIMATION_DELAY_MS}ms` }"
         >
           <div 
             v-if="plan.popular" 
-            class="absolute -top-4 right-8 rounded-full bg-accent px-4 py-1 text-sm font-semibold text-white"
+            class="absolute -top-5 right-8 rounded-full bg-gradient-to-r from-red-500 to-blue-500 px-6 py-2 text-sm font-bold text-white shadow-lg z-10 transform hover:scale-105 transition-transform duration-200 border-2 border-white"
           >
             Popular
           </div>
-          <div class="relative">
+          <div 
+            class="relative transition-all"
+            :class="{ 'opacity-0 translate-y-4': !isVisible, 'opacity-100 translate-y-0': isVisible }"
+          >
             <h3 class="text-xl font-semibold" :class="plan.popular ? 'text-white' : 'text-gray-900'">
               {{ plan.name }}
             </h3>
@@ -91,12 +94,13 @@
 </template>
 
 <script setup lang="ts">
-import { useIntersectionObserver, useLocalStorage } from '@vueuse/core'
+import { useIntersectionObserver } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
 import { ref } from 'vue'
 import type { Plan } from '~/types/pricing'
 import { useRouter } from 'vue-router'
-import { onUnmounted } from 'vue'
 
+const ANIMATION_DELAY_MS = 100
 const router = useRouter()
 const user = useSupabaseUser()
 
@@ -152,12 +156,10 @@ const handlePlanSelection = (plan: Plan) => {
   selectPlan(plan.name)
   if (plan.name === 'Enterprise') {
     router.push('/contact')
+  } else if (user.value) {
+    router.push('/dashboard')
   } else {
-    if (user.value) {
-      router.push('/dashboard')
-    } else {
-      router.push('/register')
-    }
+    router.push('/register')
   }
 }
 
@@ -166,10 +168,6 @@ useIntersectionObserver(target, ([{ isIntersecting }]: IntersectionObserverEntry
   if (isIntersecting) {
     isVisible.value = true
   }
-})
-
-onUnmounted(() => {
-  stop()
 })
 
 const selectedPlan = useLocalStorage<string>('selected-plan', '')
