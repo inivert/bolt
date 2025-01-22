@@ -60,162 +60,235 @@
                     <span class="text-lg font-medium text-gray-900">Custom Configuration</span>
                   </div>
                   <ChevronUpIcon
-                    :class="[open ? 'rotate-180 transform' : '', 'h-5 w-5 text-gray-500']"
+                    :class="[open ? 'rotate-180 transform' : '', 'h-5 w-5 text-gray-500 transition-transform duration-200']"
                   />
                 </DisclosureButton>
-                <DisclosurePanel class="px-4 py-4">
-                  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    <!-- Frontend Framework -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <CodeBracketIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        Frontend Framework
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="stack in frontendStacks"
-                          :key="stack.value"
-                          type="button"
-                          @click="formData.frontendStack = stack.value"
-                          :class="[
-                            formData.frontendStack === stack.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ stack.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
-                        </button>
+                <TransitionRoot
+                  :show="open"
+                  enter="transition-all duration-300 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition-all duration-200 ease-in"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
+                >
+                  <DisclosurePanel class="px-4 py-4 origin-top">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      <!-- Frontend Framework -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <CodeBracketIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          Frontend Framework
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="stack in frontendStacks"
+                            :key="stack.value"
+                            type="button"
+                            @click="formData.frontendStack = formData.frontendStack === stack.value ? '' : stack.value"
+                            :class="[
+                              formData.frontendStack === stack.value
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ stack.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
+                            </span>
+                            <span class="text-xs text-gray-500 mt-0.5">{{ stack.description }}</span>
+                            <span v-if="formData.frontendStack === stack.value" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <!-- UI Library -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <SwatchIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        UI Library
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="library in uiLibraries"
-                          :key="library.value"
-                          type="button"
-                          @click="formData.uiLibrary = library.value"
-                          :class="[
-                            formData.uiLibrary === library.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ library.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ library.versions }}</span>
-                        </button>
+                      <!-- UI Libraries -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <SwatchIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          UI Libraries
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="library in uiLibraries"
+                            :key="library.value"
+                            type="button"
+                            @click="toggleUILibrary(library)"
+                            :disabled="!canSelectLibrary(library) && !formData.uiLibraries.includes(library.value)"
+                            :class="[
+                              formData.uiLibraries.includes(library.value)
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : !canSelectLibrary(library) && !formData.uiLibraries.includes(library.value)
+                                  ? 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                                  : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative group'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ library.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ library.versions }}</span>
+                              <span v-if="library.type === 'complementary'" class="ml-1.5 text-xs bg-primary-50 text-primary-700 px-1.5 py-0.5 rounded">
+                                Extension
+                              </span>
+                            </span>
+                            <span class="text-xs text-gray-500 mt-0.5">{{ library.description }}</span>
+                            <span v-if="!isUILibraryCompatible(library, formData.frontendStack)" class="text-xs text-red-500 mt-0.5">
+                              Not compatible with {{ frontendStacks.find(f => f.value === formData.frontendStack)?.label }}
+                            </span>
+                            <span v-else-if="library.requires && !hasRequiredDependencies(library)" class="text-xs text-yellow-500 mt-0.5">
+                              Requires {{ library.requires.map(dep => uiLibraries.find(l => l.value === dep)?.label).join(', ') }}
+                            </span>
+                            <span v-if="formData.uiLibraries.includes(library.value)" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                            <div v-if="library.type === 'complementary' && !formData.uiLibraries.includes(library.value) && canSelectLibrary(library)" class="absolute -top-2 -right-2 bg-primary-100 text-primary-800 text-xs px-1.5 py-0.5 rounded-full">
+                              Compatible
+                            </div>
+                          </button>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">
+                          <span class="font-medium">Note:</span> You can select one primary UI library (like Tailwind CSS or Material UI) and compatible extensions that enhance it.
+                        </p>
                       </div>
-                    </div>
 
-                    <!-- Backend Stack -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <ServerIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        Backend Framework
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="stack in backendStacks"
-                          :key="stack.value"
-                          type="button"
-                          @click="formData.backendStack = stack.value"
-                          :class="[
-                            formData.backendStack === stack.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ stack.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
-                        </button>
+                      <!-- Backend Stack -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <ServerIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          Backend Framework
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="stack in backendStacks"
+                            :key="stack.value"
+                            type="button"
+                            @click="formData.backendStack = formData.backendStack === stack.value ? '' : stack.value"
+                            :class="[
+                              formData.backendStack === stack.value
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ stack.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
+                            </span>
+                            <span v-if="formData.backendStack === stack.value" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <!-- Cloud Provider -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <CloudIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        Cloud Provider
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="provider in backendProviders"
-                          :key="provider.value"
-                          type="button"
-                          @click="formData.backendProvider = provider.value"
-                          :class="[
-                            formData.backendProvider === provider.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ provider.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ provider.description }}</span>
-                        </button>
+                      <!-- Cloud Provider -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <CloudIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          Cloud Provider
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="provider in backendProviders"
+                            :key="provider.value"
+                            type="button"
+                            @click="formData.backendProvider = formData.backendProvider === provider.value ? '' : provider.value"
+                            :class="[
+                              formData.backendProvider === provider.value
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ provider.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ provider.description }}</span>
+                            </span>
+                            <span v-if="formData.backendProvider === provider.value" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <!-- Build Tools -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <CubeIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        Build Tool
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="tool in buildTools"
-                          :key="tool.value"
-                          type="button"
-                          @click="formData.buildTool = tool.value"
-                          :class="[
-                            formData.buildTool === tool.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ tool.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ tool.versions }}</span>
-                        </button>
+                      <!-- Build Tools -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <CubeIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          Build Tool
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="tool in buildTools"
+                            :key="tool.value"
+                            type="button"
+                            @click="formData.buildTool = formData.buildTool === tool.value ? '' : tool.value"
+                            :disabled="!isBuildToolCompatible(tool, formData.frontendStack)"
+                            :class="[
+                              formData.buildTool === tool.value
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : !isBuildToolCompatible(tool, formData.frontendStack)
+                                  ? 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                                  : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ tool.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ tool.versions }}</span>
+                            </span>
+                            <span class="text-xs text-gray-500 mt-0.5">{{ tool.description }}</span>
+                            <span v-if="!isBuildToolCompatible(tool, formData.frontendStack)" class="text-xs text-red-500 mt-0.5">
+                              Not compatible with {{ frontendStacks.find(f => f.value === formData.frontendStack)?.label }}
+                            </span>
+                            <span v-if="formData.buildTool === tool.value" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <!-- Package Manager -->
-                    <div class="space-y-2">
-                      <label class="block text-sm font-medium text-gray-900 flex items-center">
-                        <CubeTransparentIcon class="h-4 w-4 text-gray-400 mr-1.5" />
-                        Package Manager
-                      </label>
-                      <div class="flex flex-wrap gap-1.5">
-                        <button
-                          v-for="manager in packageManagers"
-                          :key="manager.value"
-                          type="button"
-                          @click="formData.packageManager = manager.value"
-                          :class="[
-                            formData.packageManager === manager.value
-                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
-                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
-                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
-                          ]"
-                        >
-                          {{ manager.label }}
-                          <span class="ml-1.5 text-xs opacity-60">{{ manager.versions }}</span>
-                        </button>
+                      <!-- Package Manager -->
+                      <div class="space-y-2">
+                        <label class="block text-sm font-medium text-gray-900 flex items-center">
+                          <CubeTransparentIcon class="h-4 w-4 text-gray-400 mr-1.5" />
+                          Package Manager
+                          <span class="ml-2 text-xs text-gray-500">(Click again to deselect)</span>
+                        </label>
+                        <div class="flex flex-wrap gap-1.5">
+                          <button
+                            v-for="manager in packageManagers"
+                            :key="manager.value"
+                            type="button"
+                            @click="formData.packageManager = formData.packageManager === manager.value ? '' : manager.value"
+                            :class="[
+                              formData.packageManager === manager.value
+                                ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                                : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                              'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
+                            ]"
+                          >
+                            <span class="flex items-center">
+                              {{ manager.label }}
+                              <span class="ml-1.5 text-xs opacity-60">{{ manager.versions }}</span>
+                            </span>
+                            <span v-if="formData.packageManager === manager.value" class="absolute top-2 right-2">
+                              <CheckIcon class="h-4 w-4 text-primary-500" />
+                            </span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </DisclosurePanel>
+                  </DisclosurePanel>
+                </TransitionRoot>
               </Disclosure>
 
               <!-- AI Prompt Section -->
@@ -293,8 +366,8 @@
 
             <!-- Notification -->
             <TransitionRoot
-              appear
               :show="showMessage"
+              appear
               as="div"
             >
               <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -307,6 +380,7 @@
                     leave="ease-in duration-200"
                     leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                     leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    :show="showMessage"
                   >
                     <div
                       :class="[
@@ -346,7 +420,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   Disclosure,
   DisclosureButton,
@@ -381,7 +455,7 @@ definePageMeta({
 interface FormData {
   prompt: string
   frontendStack: string
-  uiLibrary: string
+  uiLibraries: string[]
   backendStack: string
   backendProvider: string
   buildTool: string
@@ -391,25 +465,81 @@ interface FormData {
 const formData = ref<FormData>({
   prompt: '',
   frontendStack: '',
-  uiLibrary: '',
+  uiLibraries: [],
   backendStack: '',
   backendProvider: '',
   buildTool: '',
   packageManager: ''
 })
 
+// Add compatibility types
+type Framework = 'react' | 'vue' | 'svelte' | 'nextjs' | 'nuxt' | 'remix' | 'astro' | 'sveltekit'
+type BuildTool = 'vite' | 'webpack' | 'turbopack' | 'rollup' | 'esbuild' | 'swc'
+
+// Update frontendStacks with framework type
 const frontendStacks = [
-  { label: 'React', value: 'react', versions: '18+' },
-  { label: 'Vue', value: 'vue', versions: '3+' },
-  { label: 'Angular', value: 'angular', versions: '15+' },
-  { label: 'Svelte', value: 'svelte', versions: '4+' }
+  { label: 'Next.js', value: 'nextjs', versions: '14+', description: 'React Framework', framework: 'react' as Framework },
+  { label: 'Nuxt', value: 'nuxt', versions: '3+', description: 'Vue Framework', framework: 'vue' as Framework },
+  { label: 'Remix', value: 'remix', versions: '2+', description: 'React Framework', framework: 'react' as Framework },
+  { label: 'Astro', value: 'astro', versions: '4+', description: 'Content Framework', framework: null },
+  { label: 'SvelteKit', value: 'sveltekit', versions: '2+', description: 'Svelte Framework', framework: 'svelte' as Framework },
+  { label: 'React', value: 'react', versions: '18+', description: 'UI Library', framework: 'react' as Framework },
+  { label: 'Vue', value: 'vue', versions: '3+', description: 'UI Framework', framework: 'vue' as Framework },
+  { label: 'Svelte', value: 'svelte', versions: '4+', description: 'UI Framework', framework: 'svelte' as Framework }
 ]
 
+// Update uiLibraries with corrected compatibility
 const uiLibraries = [
-  { label: 'Tailwind CSS', value: 'tailwind', versions: '3.4+' },
-  { label: 'Material UI', value: 'material', versions: '5.14+' },
-  { label: 'Ant Design', value: 'antd', versions: '5.9+' },
-  { label: 'Chakra UI', value: 'chakra', versions: '2.8+' }
+  { 
+    label: 'Tailwind CSS', 
+    value: 'tailwind', 
+    versions: '3.4+', 
+    description: 'Utility-first CSS',
+    type: 'primary',
+    compatibleWith: ['react', 'vue', 'svelte', 'nextjs', 'nuxt', 'remix', 'astro', 'sveltekit'] as Framework[]
+  },
+  { 
+    label: 'Shadcn/ui', 
+    value: 'shadcn', 
+    versions: '0.5+', 
+    description: 'UI Components',
+    type: 'complementary',
+    requires: ['tailwind'],
+    compatibleWith: ['react', 'nextjs', 'nuxt'] as Framework[]
+  },
+  { 
+    label: 'Material UI', 
+    value: 'material', 
+    versions: '5.14+', 
+    description: 'Material Design',
+    type: 'primary',
+    compatibleWith: ['react', 'nextjs'] as Framework[]
+  },
+  { 
+    label: 'Ant Design', 
+    value: 'antd', 
+    versions: '5.9+', 
+    description: 'Enterprise UI',
+    type: 'primary',
+    compatibleWith: ['react', 'vue', 'nextjs', 'nuxt'] as Framework[]
+  },
+  { 
+    label: 'Chakra UI', 
+    value: 'chakra', 
+    versions: '2.8+', 
+    description: 'Accessible UI',
+    type: 'primary',
+    compatibleWith: ['react', 'nextjs'] as Framework[]
+  },
+  { 
+    label: 'DaisyUI', 
+    value: 'daisyui', 
+    versions: '4+', 
+    description: 'Tailwind Components',
+    type: 'complementary',
+    requires: ['tailwind'],
+    compatibleWith: ['react', 'vue', 'svelte', 'nextjs', 'nuxt', 'remix', 'astro', 'sveltekit'] as Framework[]
+  }
 ]
 
 const backendStacks = [
@@ -428,11 +558,56 @@ const backendProviders = [
   { label: 'Railway', value: 'railway', description: 'Developer-First Hosting' }
 ]
 
-const buildTools = [
-  { label: 'Vite', value: 'vite', versions: '5.0+' },
-  { label: 'Webpack', value: 'webpack', versions: '5.89+' },
-  { label: 'Turbopack', value: 'turbopack', versions: '1.0+' },
-  { label: 'Rspack', value: 'rspack', versions: '0.4+' }
+// Update buildTools with corrected compatibility
+const buildTools: Array<{
+  label: string
+  value: BuildTool
+  versions: string
+  description: string
+  compatibleWith: Framework[]
+}> = [
+  { 
+    label: 'Vite', 
+    value: 'vite', 
+    versions: '5.0+', 
+    description: 'Modern Build Tool',
+    compatibleWith: ['react', 'vue', 'svelte', 'nuxt', 'astro', 'sveltekit'] as Framework[]
+  },
+  { 
+    label: 'Turbopack', 
+    value: 'turbopack', 
+    versions: '1.0+', 
+    description: 'Rust-powered',
+    compatibleWith: ['nextjs'] as Framework[]
+  },
+  { 
+    label: 'Webpack', 
+    value: 'webpack', 
+    versions: '5.89+', 
+    description: 'Bundler',
+    compatibleWith: ['react', 'vue', 'svelte', 'nextjs', 'nuxt', 'remix'] as Framework[]
+  },
+  { 
+    label: 'Rollup', 
+    value: 'rollup', 
+    versions: '4.0+', 
+    description: 'Module Bundler',
+    compatibleWith: ['react', 'vue', 'svelte'] as Framework[]
+  },
+  { 
+    label: 'esbuild', 
+    value: 'esbuild', 
+    versions: '0.19+', 
+    description: 'Fast Bundler',
+    compatibleWith: ['react', 'vue', 'svelte', 'nextjs', 'nuxt'] as Framework[]
+  },
+  { 
+    label: 'SWC', 
+    value: 'swc', 
+    versions: '1.3+', 
+    description: 'Rust Compiler',
+    compatibleWith: ['react', 'nextjs'] as Framework[]
+  }
 ]
 
 const packageManagers = [
@@ -445,15 +620,15 @@ const packageManagers = [
 const presets = [
   {
     name: 'Modern Web App',
-    description: 'Full-stack JavaScript with modern tooling',
+    description: 'Full-stack TypeScript with modern tooling',
     icon: CommandLineIcon,
-    technologies: ['Vue 3', 'Tailwind CSS', 'Node.js', 'Vercel'],
+    technologies: ['Next.js', 'Tailwind CSS', 'Node.js', 'Vercel'],
     config: {
-      frontendStack: 'vue',
-      uiLibrary: 'tailwind',
+      frontendStack: 'nextjs',
+      uiLibraries: ['tailwind', 'shadcn'],
       backendStack: 'node',
       backendProvider: 'vercel',
-      buildTool: 'vite',
+      buildTool: 'turbopack',
       packageManager: 'pnpm'
     }
   },
@@ -461,10 +636,10 @@ const presets = [
     name: 'Enterprise Solution',
     description: 'Robust and scalable architecture',
     icon: CubeIcon,
-    technologies: ['React', 'Material UI', 'Node.js', 'AWS'],
+    technologies: ['Next.js', 'Material UI', 'Node.js', 'AWS'],
     config: {
-      frontendStack: 'react',
-      uiLibrary: 'material',
+      frontendStack: 'nextjs',
+      uiLibraries: ['material'],
       backendStack: 'node',
       backendProvider: 'aws',
       buildTool: 'webpack',
@@ -475,11 +650,11 @@ const presets = [
     name: 'Cloud Native',
     description: 'Serverless and cloud-first approach',
     icon: CloudIcon,
-    technologies: ['Vue 3', 'Tailwind CSS', 'Python', 'Firebase'],
+    technologies: ['Nuxt', 'Tailwind CSS', 'Node.js', 'Firebase'],
     config: {
-      frontendStack: 'vue',
-      uiLibrary: 'tailwind',
-      backendStack: 'python',
+      frontendStack: 'nuxt',
+      uiLibraries: ['tailwind'],
+      backendStack: 'node',
       backendProvider: 'firebase',
       buildTool: 'vite',
       packageManager: 'pnpm'
@@ -488,6 +663,22 @@ const presets = [
 ]
 
 const applyPreset = (preset: typeof presets[0]) => {
+  // Check if the preset is already selected
+  if (isPresetSelected.value(preset)) {
+    // If selected, clear all values
+    formData.value = {
+      prompt: formData.value.prompt, // Keep the prompt
+      frontendStack: '',
+      uiLibraries: [],
+      backendStack: '',
+      backendProvider: '',
+      buildTool: '',
+      packageManager: ''
+    }
+    return
+  }
+
+  // If not selected, apply the preset
   formData.value = {
     ...formData.value,
     ...preset.config
@@ -530,6 +721,106 @@ const handleSubmit = async () => {
 }
 
 const isPresetSelected = computed(() => (preset: typeof presets[0]) => {
-  return Object.entries(preset.config).every(([key, value]) => formData.value[key as keyof FormData] === value)
+  return Object.entries(preset.config).every(([key, value]) => {
+    if (Array.isArray(value)) {
+      const currentValue = formData.value[key as keyof FormData]
+      return Array.isArray(currentValue) && 
+        value.length === currentValue.length && 
+        value.every(v => currentValue.includes(v))
+    }
+    return formData.value[key as keyof FormData] === value
+  })
+})
+
+// Add compatibility helper functions
+const getBaseFramework = (framework: string): Framework | null => {
+  const stack = frontendStacks.find(s => s.value === framework)
+  return stack?.framework || framework as Framework || null
+}
+
+const isUILibraryCompatible = (library: typeof uiLibraries[0], framework: string): boolean => {
+  if (!framework) return true
+  const baseFramework = getBaseFramework(framework)
+  return library.compatibleWith.includes(framework as Framework) || 
+         (baseFramework && library.compatibleWith.includes(baseFramework))
+}
+
+const isBuildToolCompatible = (tool: typeof buildTools[0], framework: string): boolean => {
+  const baseFramework = getBaseFramework(framework)
+  if (!baseFramework) return true
+  return tool.compatibleWith.includes(framework as Framework) || 
+         tool.compatibleWith.includes(baseFramework)
+}
+
+const hasRequiredDependencies = (library: typeof uiLibraries[0]): boolean => {
+  if (!library.requires) return true
+  return library.requires.every(dep => formData.value.uiLibraries.includes(dep))
+}
+
+const canSelectLibrary = (library: typeof uiLibraries[0]): boolean => {
+  // Can't select if incompatible with current framework
+  if (!isUILibraryCompatible(library, formData.value.frontendStack)) return false
+
+  // If it's complementary, check if required dependencies are selected
+  if (library.type === 'complementary' && !hasRequiredDependencies(library)) return false
+
+  // If it's a primary library, can't select if another primary is selected (unless it's Tailwind)
+  if (library.type === 'primary' && library.value !== 'tailwind') {
+    const hasOtherPrimary = formData.value.uiLibraries.some(lib => {
+      const libConfig = uiLibraries.find(l => l.value === lib)
+      return libConfig?.type === 'primary' && libConfig.value !== 'tailwind'
+    })
+    if (hasOtherPrimary) return false
+  }
+
+  return true
+}
+
+const toggleUILibrary = (library: typeof uiLibraries[0]) => {
+  const index = formData.value.uiLibraries.indexOf(library.value)
+  
+  // If already selected, remove it and its dependents
+  if (index !== -1) {
+    formData.value.uiLibraries.splice(index, 1)
+    // Also remove any complementary libraries that required this one
+    if (library.type === 'primary') {
+      formData.value.uiLibraries = formData.value.uiLibraries.filter(lib => {
+        const libConfig = uiLibraries.find(l => l.value === lib)
+        return !libConfig?.requires?.includes(library.value)
+      })
+    }
+    return
+  }
+
+  // If not selected and can't select, return
+  if (!canSelectLibrary(library)) return
+
+  // If it's a primary library (except Tailwind), remove any existing primary
+  if (library.type === 'primary' && library.value !== 'tailwind') {
+    formData.value.uiLibraries = formData.value.uiLibraries.filter(lib => {
+      const libConfig = uiLibraries.find(l => l.value === lib)
+      return libConfig?.type === 'complementary' || libConfig?.value === 'tailwind'
+    })
+  }
+  
+  // Add the new library
+  formData.value.uiLibraries.push(library.value)
+}
+
+// Add watchers to handle compatibility
+watch(() => formData.value.frontendStack, (newFramework) => {
+  // Reset incompatible UI libraries
+  formData.value.uiLibraries = formData.value.uiLibraries.filter(lib => {
+    const library = uiLibraries.find(l => l.value === lib)
+    return library && isUILibraryCompatible(library, newFramework)
+  })
+
+  // Reset incompatible build tool
+  if (formData.value.buildTool) {
+    const currentTool = buildTools.find(tool => tool.value === formData.value.buildTool)
+    if (currentTool && !isBuildToolCompatible(currentTool, newFramework)) {
+      formData.value.buildTool = ''
+    }
+  }
 })
 </script>
