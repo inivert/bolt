@@ -9,310 +9,233 @@
         <div class="bg-white shadow-lg sm:rounded-2xl overflow-hidden">
           <div class="px-4 py-5 sm:p-6">
             <form @submit.prevent="handleSubmit" class="space-y-8">
-              <!-- Tech Stack Configuration -->
-              <Disclosure v-slot="{ open }" as="div" class="border border-gray-200 rounded-xl" defaultOpen>
+              <!-- Quick Presets -->
+              <div class="space-y-4">
+                <h3 class="text-lg font-medium leading-6 text-gray-900 flex items-center">
+                  <SparklesIcon class="h-5 w-5 text-primary-500 mr-2" />
+                  Quick Start Presets
+                </h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <button
+                    type="button"
+                    v-for="preset in presets"
+                    :key="preset.name"
+                    @click="applyPreset(preset)"
+                    :class="[
+                      isPresetSelected(preset)
+                        ? 'ring-2 ring-primary-500 border-primary-500'
+                        : 'border-gray-200 hover:border-primary-500/50',
+                      'relative flex flex-col items-start p-4 border-2 rounded-xl focus:outline-none transition-all duration-200 group bg-white hover:shadow-md'
+                    ]"
+                  >
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl"></div>
+                    <div class="relative flex items-center justify-between w-full">
+                      <span class="text-base font-medium text-gray-900">{{ preset.name }}</span>
+                      <div class="flex items-center space-x-2">
+                        <span v-if="isPresetSelected(preset)" class="flex h-5 w-5 items-center justify-center rounded-full bg-primary-500/10">
+                          <CheckIcon class="h-4 w-4 text-primary-500" />
+                        </span>
+                        <preset.icon class="h-5 w-5 text-gray-400 group-hover:text-primary-500 transition-colors duration-200" />
+                      </div>
+                    </div>
+                    <p class="mt-1 text-sm text-gray-500">{{ preset.description }}</p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                      <span
+                        v-for="(tech, index) in preset.technologies"
+                        :key="index"
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700"
+                      >
+                        {{ tech }}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Custom Configuration -->
+              <Disclosure v-slot="{ open }" as="div" class="border border-gray-200 rounded-xl bg-white shadow-sm">
                 <DisclosureButton class="flex w-full justify-between px-4 py-3 bg-gray-50/50 hover:bg-gray-50 transition-colors duration-200">
                   <div class="flex items-center">
-                    <CodeBracketIcon class="h-5 w-5 text-primary-500 mr-2" />
-                    <span class="text-lg font-medium text-gray-900">Tech Stack Configuration</span>
+                    <WrenchScrewdriverIcon class="h-5 w-5 text-primary-500 mr-2" />
+                    <span class="text-lg font-medium text-gray-900">Custom Configuration</span>
                   </div>
                   <ChevronUpIcon
                     :class="[open ? 'rotate-180 transform' : '', 'h-5 w-5 text-gray-500']"
                   />
                 </DisclosureButton>
-                <DisclosurePanel class="px-4 py-4 space-y-6">
-                  <!-- Frontend Framework -->
-                  <Listbox v-model="formData.frontendStack">
+                <DisclosurePanel class="px-4 py-4">
+                  <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <!-- Frontend Framework -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <CodeBracketIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         Frontend Framework
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.frontendStack ? frontendStacks.find(s => s.value === formData.frontendStack)?.label : 'Select a framework' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="stack in frontendStacks"
+                          :key="stack.value"
+                          type="button"
+                          @click="formData.frontendStack = stack.value"
+                          :class="[
+                            formData.frontendStack === stack.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="stack in frontendStacks"
-                              :key="stack.value"
-                              :value="stack.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ stack.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ stack.versions }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ stack.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
 
-                  <!-- UI Library -->
-                  <Listbox v-model="formData.uiLibrary">
+                    <!-- UI Library -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <SwatchIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         UI Library
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.uiLibrary ? uiLibraries.find(l => l.value === formData.uiLibrary)?.label : 'Select a UI library' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="library in uiLibraries"
+                          :key="library.value"
+                          type="button"
+                          @click="formData.uiLibrary = library.value"
+                          :class="[
+                            formData.uiLibrary === library.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="library in uiLibraries"
-                              :key="library.value"
-                              :value="library.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ library.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ library.versions }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ library.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ library.versions }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
 
-                  <!-- Backend Stack -->
-                  <Listbox v-model="formData.backendStack">
+                    <!-- Backend Stack -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <ServerIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         Backend Framework
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.backendStack ? backendStacks.find(s => s.value === formData.backendStack)?.label : 'Select a backend' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="stack in backendStacks"
+                          :key="stack.value"
+                          type="button"
+                          @click="formData.backendStack = stack.value"
+                          :class="[
+                            formData.backendStack === stack.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="stack in backendStacks"
-                              :key="stack.value"
-                              :value="stack.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ stack.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ stack.versions }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ stack.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ stack.versions }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
 
-                  <!-- Cloud Provider -->
-                  <Listbox v-model="formData.backendProvider">
+                    <!-- Cloud Provider -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <CloudIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         Cloud Provider
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.backendProvider ? backendProviders.find(p => p.value === formData.backendProvider)?.label : 'Select a provider' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="provider in backendProviders"
+                          :key="provider.value"
+                          type="button"
+                          @click="formData.backendProvider = provider.value"
+                          :class="[
+                            formData.backendProvider === provider.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="provider in backendProviders"
-                              :key="provider.value"
-                              :value="provider.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ provider.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ provider.description }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ provider.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ provider.description }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
 
-                  <!-- Build Tools -->
-                  <Listbox v-model="formData.buildTool">
+                    <!-- Build Tools -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <CubeIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         Build Tool
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.buildTool ? buildTools.find(t => t.value === formData.buildTool)?.label : 'Select a build tool' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="tool in buildTools"
+                          :key="tool.value"
+                          type="button"
+                          @click="formData.buildTool = tool.value"
+                          :class="[
+                            formData.buildTool === tool.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="tool in buildTools"
-                              :key="tool.value"
-                              :value="tool.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ tool.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ tool.versions }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ tool.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ tool.versions }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
 
-                  <!-- Package Manager -->
-                  <Listbox v-model="formData.packageManager">
+                    <!-- Package Manager -->
                     <div class="space-y-2">
-                      <ListboxLabel class="block text-sm font-medium text-gray-900">
+                      <label class="block text-sm font-medium text-gray-900 flex items-center">
+                        <CubeTransparentIcon class="h-4 w-4 text-gray-400 mr-1.5" />
                         Package Manager
-                      </ListboxLabel>
-                      <div class="relative">
-                        <ListboxButton class="relative w-full cursor-pointer rounded-lg bg-white py-3 pl-3 pr-10 text-left border-2 border-gray-200 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all duration-200">
-                          <span class="block truncate">
-                            {{ formData.packageManager ? packageManagers.find(m => m.value === formData.packageManager)?.label : 'Select a package manager' }}
-                          </span>
-                          <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                            <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </ListboxButton>
-                        <Transition
-                          leave-active-class="transition duration-100 ease-in"
-                          leave-from-class="opacity-100"
-                          leave-to-class="opacity-0"
+                      </label>
+                      <div class="flex flex-wrap gap-1.5">
+                        <button
+                          v-for="manager in packageManagers"
+                          :key="manager.value"
+                          type="button"
+                          @click="formData.packageManager = manager.value"
+                          :class="[
+                            formData.packageManager === manager.value
+                              ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
+                              : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
+                            'inline-flex items-center px-2.5 py-1.5 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm'
+                          ]"
                         >
-                          <ListboxOptions class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <ListboxOption
-                              v-for="manager in packageManagers"
-                              :key="manager.value"
-                              :value="manager.value"
-                              v-slot="{ active, selected }"
-                            >
-                              <li :class="[
-                                active ? 'bg-primary-50 text-primary-900' : 'text-gray-900',
-                                'relative cursor-pointer select-none py-2 pl-10 pr-4'
-                              ]">
-                                <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-                                  {{ manager.label }}
-                                  <span class="ml-2 text-sm text-gray-500">{{ manager.versions }}</span>
-                                </span>
-                                <span v-if="selected" class="absolute inset-y-0 left-0 flex items-center pl-3 text-primary-600">
-                                  <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              </li>
-                            </ListboxOption>
-                          </ListboxOptions>
-                        </Transition>
+                          {{ manager.label }}
+                          <span class="ml-1.5 text-xs opacity-60">{{ manager.versions }}</span>
+                        </button>
                       </div>
                     </div>
-                  </Listbox>
+                  </div>
                 </DisclosurePanel>
               </Disclosure>
 
               <!-- AI Prompt Section -->
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
-                  <label for="prompt" class="block text-lg font-medium text-gray-900">
+                  <label for="prompt" class="block text-lg font-medium text-gray-900 flex items-center">
+                    <SparklesIcon class="h-5 w-5 text-primary-500 mr-2" />
                     AI Prompt
                     <span class="text-sm ml-2 text-gray-500">(Minimum 50 characters)</span>
                   </label>
-                  <span class="text-sm text-gray-500">
+                  <span :class="[
+                    formData.prompt?.length >= 1800 ? 'text-yellow-500' : 'text-gray-500',
+                    'text-sm transition-colors duration-200'
+                  ]">
                     {{ formData.prompt?.length || 0 }}/2000
                   </span>
                 </div>
                 
                 <div class="relative group">
-                  <div class="absolute inset-0 bg-gradient-to-br from-white/50 to-primary-50/20 rounded-xl shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+                  <div class="absolute inset-0 bg-gradient-to-br from-primary-50/30 to-secondary-50/30 rounded-xl shadow-sm transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
                   <div class="relative rounded-xl border-2 border-gray-200 bg-white/80 backdrop-blur-sm focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 transition-all duration-200">
                     <textarea
                       id="prompt"
@@ -326,13 +249,16 @@
                       placeholder="Describe what you want to generate..."
                     />
                     <div class="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-gray-50/50">
-                      <span v-if="(formData.prompt?.length || 0) < 50" class="text-xs text-red-500">
+                      <span v-if="(formData.prompt?.length || 0) < 50" class="text-xs text-red-500 flex items-center">
+                        <ExclamationCircleIcon class="h-4 w-4 mr-1" />
                         Minimum 50 characters required
                       </span>
-                      <span v-else-if="formData.prompt?.length >= 1800" class="text-xs text-yellow-500">
+                      <span v-else-if="formData.prompt?.length >= 1800" class="text-xs text-yellow-500 flex items-center">
+                        <ExclamationTriangleIcon class="h-4 w-4 mr-1" />
                         Approaching character limit
                       </span>
-                      <span v-else class="text-xs text-gray-500">
+                      <span v-else class="text-xs text-gray-500 flex items-center">
+                        <PencilIcon class="h-4 w-4 mr-1" />
                         Type your requirements in detail
                       </span>
                     </div>
@@ -420,13 +346,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
-  Listbox,
-  ListboxButton,
-  ListboxLabel,
-  ListboxOption,
-  ListboxOptions,
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
@@ -435,11 +356,21 @@ import {
 } from '@headlessui/vue'
 import {
   CheckIcon,
-  ChevronUpDownIcon,
   ChevronUpIcon,
   ArrowRightIcon,
-  CodeBracketIcon,
+  WrenchScrewdriverIcon,
   XMarkIcon,
+  CommandLineIcon,
+  CloudIcon,
+  CubeIcon,
+  SparklesIcon,
+  CodeBracketIcon,
+  ServerIcon,
+  SwatchIcon,
+  CubeTransparentIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+  PencilIcon,
 } from '@heroicons/vue/24/outline'
 
 definePageMeta({
@@ -511,6 +442,58 @@ const packageManagers = [
   { label: 'bun', value: 'bun', versions: '1.0+' }
 ]
 
+const presets = [
+  {
+    name: 'Modern Web App',
+    description: 'Full-stack JavaScript with modern tooling',
+    icon: CommandLineIcon,
+    technologies: ['Vue 3', 'Tailwind CSS', 'Node.js', 'Vercel'],
+    config: {
+      frontendStack: 'vue',
+      uiLibrary: 'tailwind',
+      backendStack: 'node',
+      backendProvider: 'vercel',
+      buildTool: 'vite',
+      packageManager: 'pnpm'
+    }
+  },
+  {
+    name: 'Enterprise Solution',
+    description: 'Robust and scalable architecture',
+    icon: CubeIcon,
+    technologies: ['React', 'Material UI', 'Node.js', 'AWS'],
+    config: {
+      frontendStack: 'react',
+      uiLibrary: 'material',
+      backendStack: 'node',
+      backendProvider: 'aws',
+      buildTool: 'webpack',
+      packageManager: 'yarn'
+    }
+  },
+  {
+    name: 'Cloud Native',
+    description: 'Serverless and cloud-first approach',
+    icon: CloudIcon,
+    technologies: ['Vue 3', 'Tailwind CSS', 'Python', 'Firebase'],
+    config: {
+      frontendStack: 'vue',
+      uiLibrary: 'tailwind',
+      backendStack: 'python',
+      backendProvider: 'firebase',
+      buildTool: 'vite',
+      packageManager: 'pnpm'
+    }
+  }
+]
+
+const applyPreset = (preset: typeof presets[0]) => {
+  formData.value = {
+    ...formData.value,
+    ...preset.config
+  }
+}
+
 const isLoading = ref(false)
 const showMessage = ref(false)
 const isError = ref(false)
@@ -545,4 +528,8 @@ const handleSubmit = async () => {
     setTimeout(() => showMessage.value = false, 5000)
   }
 }
+
+const isPresetSelected = computed(() => (preset: typeof presets[0]) => {
+  return Object.entries(preset.config).every(([key, value]) => formData.value[key as keyof FormData] === value)
+})
 </script>
