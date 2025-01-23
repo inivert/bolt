@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative">
     <!-- Mobile menu button -->
     <button
       type="button"
@@ -12,73 +12,82 @@
       </svg>
     </button>
 
-    <!-- Mobile menu, show/hide based on menu state -->
-    <Transition
-      enter-active-class="transition ease-out duration-100"
-      enter-from-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-active-class="transition ease-in duration-75"
-      leave-from-class="transform opacity-100 scale-100"
-      leave-to-class="transform opacity-0 scale-95"
+    <!-- Mobile menu -->
+    <div
+      v-if="isOpen"
+      class="fixed inset-0 z-50 lg:hidden"
+      role="dialog"
+      aria-modal="true"
     >
+      <!-- Background backdrop -->
       <div
-        v-if="isOpen"
-        class="absolute inset-0 z-50 lg:hidden"
-        role="dialog"
-        aria-modal="true"
-      >
-        <!-- Background backdrop -->
-        <div
-          class="fixed inset-0 bg-gray-600 bg-opacity-75"
-          @click="$emit('close-menu')"
-        />
+        class="fixed inset-0 bg-gray-600/75 backdrop-blur-sm"
+        @click="$emit('close-menu')"
+      />
 
-        <div class="fixed inset-0 z-50 flex">
-          <div class="relative flex w-full max-w-xs flex-1 flex-col bg-white pb-4 pt-5">
-            <div class="absolute right-0 top-0 -mr-12 pt-2">
-              <button
-                type="button"
-                class="ml-1 flex h-10 w-10 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                @click="$emit('close-menu')"
-              >
-                <span class="sr-only">Close menu</span>
-                <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+      <!-- Menu panel -->
+      <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white sm:max-w-sm">
+        <div class="flex h-16 items-center justify-between px-6 border-b border-gray-200 bg-gradient-to-r from-white/90 to-primary-100/30">
+          <NuxtLink 
+            to="/" 
+            class="text-2xl font-bold bg-gradient-to-r from-primary-800 to-primary-600 bg-clip-text text-transparent"
+            @click="$emit('close-menu')"
+          >
+            Nexcode
+          </NuxtLink>
+          <button
+            type="button"
+            class="rounded-md p-2.5 text-gray-700 hover:bg-gray-100"
+            @click="$emit('close-menu')"
+          >
+            <span class="sr-only">Close menu</span>
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div class="px-6 py-4">
+          <nav class="space-y-2">
+            <NuxtLink
+              v-for="item in navigationItems"
+              :key="item.name"
+              :to="item.to"
+              class="group flex items-center gap-x-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200"
+              :class="[
+                isCurrentRoute(item.to)
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-gray-900 hover:bg-gray-50'
+              ]"
+              @click="$emit('close-menu')"
+            >
+              <component
+                :is="item.icon"
+                :class="[
+                  isCurrentRoute(item.to) ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500',
+                  'h-5 w-5 shrink-0'
+                ]"
+                aria-hidden="true"
+              />
+              {{ item.name }}
+            </NuxtLink>
+          </nav>
 
-            <!-- Navigation items -->
-            <div class="mt-5 flex flex-grow flex-col">
-              <nav class="flex-1 space-y-1 px-2">
-                <NuxtLink
-                  v-for="item in navigationItems"
-                  :key="item.name"
-                  :to="item.to"
-                  class="group flex items-center rounded-md px-2 py-2 text-base font-medium"
-                  :class="[
-                    isCurrentRoute(item.to)
-                      ? 'bg-primary/20 text-primary'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  ]"
-                  @click="$emit('close-menu')"
-                >
-                  <component
-                    :is="item.icon"
-                    :class="[
-                      isCurrentRoute(item.to) ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500',
-                      'mr-4 h-6 w-6'
-                    ]"
-                    aria-hidden="true"
-                  />
-                  {{ item.name }}
-                </NuxtLink>
-              </nav>
-            </div>
+          <div class="mt-6 border-t border-gray-200 pt-4">
+            <NuxtLink
+              to="/"
+              class="flex items-center gap-x-3 rounded-lg px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50"
+              @click="$emit('close-menu')"
+            >
+              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              Exit to Home
+            </NuxtLink>
           </div>
         </div>
       </div>
-    </Transition>
+    </div>
   </div>
 </template>
 

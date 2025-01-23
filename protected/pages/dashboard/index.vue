@@ -2,13 +2,13 @@
   <div class="min-h-[calc(100vh-4rem)]">
     <!-- Mobile view -->
     <div class="lg:hidden">
-      <div class="bg-white shadow">
+      <div class="bg-gradient-to-r from-white/90 to-primary-100/30 backdrop-blur-md shadow-sm">
         <div class="px-4 py-5">
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold text-gray-900">Welcome back, {{ userName }}!</h2>
             <UserMenu class="ml-4" />
           </div>
-          <p class="mt-1 text-sm text-gray-500">Here's what's happening with your projects today.</p>
+          <p class="mt-1 text-sm text-gray-500">Here's an overview of your website's performance.</p>
         </div>
       </div>
 
@@ -16,50 +16,57 @@
       <div class="px-4 py-6 space-y-6">
         <div class="grid grid-cols-1 gap-4">
           <template v-for="card in statsCards" :key="card.title">
-            <StatsCard
-              :title="card.title"
-              :value="card.value"
-              :color="card.color"
-              :change="card.change"
-              :change-type="card.changeType"
-            >
-              <template #icon>
-                <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
-                </svg>
-              </template>
-              <template v-if="card.footer" #footer>
+            <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg p-6 shadow-md backdrop-blur-sm border border-gray-100">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-1">
+                  <h3 class="text-sm font-medium text-gray-900">{{ card.title }}</h3>
+                  <div class="mt-1">
+                    <p class="text-2xl font-semibold text-gray-900">{{ card.value }}</p>
+                  </div>
+                  <div v-if="card.change" class="mt-2">
+                    <p :class="`text-sm ${card.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}`">
+                      {{ card.change }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div v-if="card.footer" class="mt-4 border-t border-gray-100 pt-4">
                 <NuxtLink :to="card.footer.link" :class="`text-sm font-medium text-${card.iconColor}-600 hover:text-${card.iconColor}-500 flex items-center gap-1`">
                   {{ card.footer.text }}
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </NuxtLink>
-              </template>
-            </StatsCard>
+              </div>
+            </div>
           </template>
         </div>
 
         <!-- Mobile quick actions -->
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg shadow-md backdrop-blur-sm border border-gray-100">
           <div class="p-4 border-b border-gray-200">
             <h3 class="text-base font-medium text-gray-900">Quick Actions</h3>
           </div>
           <div class="p-4">
             <button
-              class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-              @click="$router.push('/dashboard/projects')"
+              class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-primary to-primary-600 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-200"
+              @click="$router.push('/dashboard/website-overview')"
             >
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
-              Create new project
+              View Website Details
             </button>
           </div>
         </div>
 
         <!-- Mobile recent activity -->
-        <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg shadow-md backdrop-blur-sm border border-gray-100">
           <div class="p-4 border-b border-gray-200">
             <h3 class="text-base font-medium text-gray-900">Recent Activity</h3>
           </div>
@@ -84,44 +91,51 @@
     </div>
 
     <!-- Desktop view -->
-    <div class="hidden lg:block bg-gray-50">
+    <div class="hidden lg:block">
       <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8">
         <!-- Welcome section -->
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg shadow-md backdrop-blur-sm border border-gray-100 p-6">
           <h2 class="text-2xl font-bold text-gray-900">Welcome back, {{ userName }}!</h2>
-          <p class="mt-1 text-sm text-gray-500">Here's what's happening with your projects today.</p>
+          <p class="mt-1 text-sm text-gray-500">Here's an overview of your website's performance.</p>
         </div>
 
         <!-- Stats grid -->
         <div class="grid grid-cols-3 gap-6">
           <template v-for="card in statsCards" :key="card.title">
-            <StatsCard
-              :title="card.title"
-              :value="card.value"
-              :color="card.color"
-              :change="card.change"
-              :change-type="card.changeType"
-            >
-              <template #icon>
-                <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
-                </svg>
-              </template>
-              <template v-if="card.footer" #footer>
+            <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg p-6 shadow-md backdrop-blur-sm border border-gray-100">
+              <div class="flex items-center">
+                <div class="flex-shrink-0">
+                  <svg :class="`h-6 w-6 text-${card.iconColor}-600`" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="card.icon" />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-1">
+                  <h3 class="text-sm font-medium text-gray-900">{{ card.title }}</h3>
+                  <div class="mt-1">
+                    <p class="text-2xl font-semibold text-gray-900">{{ card.value }}</p>
+                  </div>
+                  <div v-if="card.change" class="mt-2">
+                    <p :class="`text-sm ${card.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}`">
+                      {{ card.change }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div v-if="card.footer" class="mt-4 border-t border-gray-100 pt-4">
                 <NuxtLink :to="card.footer.link" :class="`text-sm font-medium text-${card.iconColor}-600 hover:text-${card.iconColor}-500 flex items-center gap-1`">
                   {{ card.footer.text }}
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                   </svg>
                 </NuxtLink>
-              </template>
-            </StatsCard>
+              </div>
+            </div>
           </template>
         </div>
 
         <div class="grid grid-cols-3 gap-6">
           <!-- Recent activity -->
-          <div class="col-span-2 bg-white shadow rounded-lg overflow-hidden">
+          <div class="col-span-2 bg-gradient-to-br from-white to-gray-50/90 rounded-lg shadow-md backdrop-blur-sm border border-gray-100">
             <div class="p-6 border-b border-gray-200">
               <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
             </div>
@@ -144,19 +158,19 @@
           </div>
 
           <!-- Quick actions -->
-          <div class="bg-white shadow rounded-lg overflow-hidden">
+          <div class="bg-gradient-to-br from-white to-gray-50/90 rounded-lg shadow-md backdrop-blur-sm border border-gray-100">
             <div class="p-6 border-b border-gray-200">
               <h3 class="text-lg font-medium text-gray-900">Quick Actions</h3>
             </div>
             <div class="p-6">
               <button
-                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
-                @click="$router.push('/dashboard/projects')"
+                class="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-6 text-center hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200 group"
+                @click="$router.push('/dashboard/website-overview')"
               >
-                <svg class="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                <svg class="mx-auto h-8 w-8 text-gray-400 group-hover:text-primary transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
-                <span class="mt-2 block text-sm font-medium text-gray-900">Create new project</span>
+                <span class="mt-2 block text-sm font-medium text-gray-900">View Website Details</span>
               </button>
             </div>
           </div>
@@ -174,43 +188,57 @@ definePageMeta({
   middleware: ['auth']
 })
 
+interface StatsCard {
+  title: string
+  value: number
+  color: string
+  icon: string
+  iconColor: string
+  change?: string
+  changeType?: 'increase' | 'decrease'
+  footer?: {
+    text: string
+    link: string
+  }
+}
+
 const loading = ref(true)
-const totalProjects = ref(0)
-const activeProjects = ref(0)
-const completedProjects = ref(0)
+const totalAnalytics = ref(0)
+const activeUsers = ref(0)
+const pageViews = ref(0)
 const hasActivity = ref(false)
-const projectsChange = ref('0%')
-const projectsChangeType = ref<'increase' | 'decrease'>('increase')
+const analyticsChange = ref('0%')
+const analyticsChangeType = ref<'increase' | 'decrease'>('increase')
 
 const LOADING_DELAY_MS = 1000
 
 // Stats card configurations for reuse
-const statsCards = [
+const statsCards: StatsCard[] = [
   {
-    title: 'Total Projects',
-    value: totalProjects,
+    title: 'Website Analytics',
+    value: totalAnalytics.value,
     color: 'blue',
-    change: projectsChange,
-    changeType: projectsChangeType,
+    change: analyticsChange.value,
+    changeType: analyticsChangeType.value,
     icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2M7 7h10',
     iconColor: 'blue',
     footer: {
-      text: 'View all projects',
-      link: '/dashboard/projects'
+      text: 'View full analytics',
+      link: '/dashboard/website-overview'
     }
   },
   {
-    title: 'Active Projects',
-    value: activeProjects,
+    title: 'Active Users',
+    value: activeUsers.value,
     color: 'green',
-    icon: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+    icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
     iconColor: 'green'
   },
   {
-    title: 'Completed Projects',
-    value: completedProjects,
+    title: 'Page Views',
+    value: pageViews.value,
     color: 'purple',
-    icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2',
+    icon: 'M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z',
     iconColor: 'purple'
   }
 ]

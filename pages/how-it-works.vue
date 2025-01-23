@@ -263,7 +263,7 @@
               </p>
               <div class="mt-8">
                 <NuxtLink
-                  to="/contact"
+                  to="/consultation"
                   class="inline-flex items-center rounded-full bg-gradient-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
                 >
                   Schedule a Consultation

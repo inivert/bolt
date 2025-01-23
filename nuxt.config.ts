@@ -14,10 +14,29 @@ export default defineNuxtConfig({
     payloadExtraction: false
   },
   nitro: {
-    routeRules: {
-      '/**': { ssr: false }
+    prerender: {
+      routes: [
+        '/',
+        '/login',
+        '/register',
+        '/dashboard',
+        '/dashboard/support',
+        '/dashboard/website-overview',
+        '/dashboard/billing',
+        // Add other routes you want to prerender
+      ]
     }
   },
+  routeRules: {
+    '/': { prerender: true },
+    '/login': { prerender: true },
+    '/register': { prerender: true },
+    '/dashboard': { ssr: false },
+    '/dashboard/support': { ssr: false },
+    '/dashboard/website-overview': { ssr: false },
+    '/dashboard/billing': { ssr: false }
+  },
+  pages: true,
   build: {
     transpile: ['vue']
   },
@@ -83,19 +102,24 @@ export default defineNuxtConfig({
           file: resolve(__dirname, './protected/pages/dashboard/index.vue')
         },
         {
-          name: 'dashboard-projects',
-          path: '/dashboard/projects',
-          file: resolve(__dirname, './protected/pages/dashboard/projects.vue')
-        },
-        {
           name: 'dashboard-settings',
           path: '/dashboard/settings',
           file: resolve(__dirname, './protected/pages/dashboard/settings.vue')
         },
         {
-          name: 'dashboard-generate',
-          path: '/dashboard/generate',
-          file: resolve(__dirname, './protected/pages/dashboard/generate/index.vue')
+          name: 'dashboard-support',
+          path: '/dashboard/support',
+          file: resolve(__dirname, './protected/pages/dashboard/support/index.vue')
+        },
+        {
+          name: 'dashboard-website-overview',
+          path: '/dashboard/website-overview',
+          file: resolve(__dirname, './protected/pages/dashboard/website-overview.vue')
+        },
+        {
+          name: 'dashboard-billing',
+          path: '/dashboard/billing',
+          file: resolve(__dirname, './protected/pages/dashboard/billing/index.vue')
         }
       ]
 
@@ -117,8 +141,12 @@ export default defineNuxtConfig({
     layouts: 'layouts'
   },
   alias: {
-    layouts: '~/layouts',
-    'layouts-protected': '~/protected/layouts'
+    pages: resolve(__dirname, './pages'),
+    components: resolve(__dirname, './components'),
+    layouts: resolve(__dirname, './layouts'),
+    public: resolve(__dirname, './public'),
+    'protected/pages': resolve(__dirname, './protected/pages'),
+    'protected/components': resolve(__dirname, './protected/components')
   },
   colorMode: {
     classSuffix: ''

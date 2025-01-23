@@ -116,7 +116,7 @@
         <p class="mt-4 text-lg text-gray-600">Let's discuss your project and create something amazing together</p>
         <div class="mt-8">
           <NuxtLink
-            to="/contact"
+            to="/consultation"
             class="inline-flex items-center rounded-full bg-gradient-primary px-8 py-3 text-lg font-semibold text-white shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
           >
             Schedule Free Consultation

@@ -1,19 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Mobile navigation -->
-    <MobileNav 
-      :is-open="isSidebarOpen"
-      :navigation-items="navigationItems"
-      @toggle-menu="isSidebarOpen = !isSidebarOpen"
-      @close-menu="isSidebarOpen = false"
-    />
-
+  <div class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
     <!-- Desktop sidebar -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-      <div class="flex-1 flex flex-col min-h-0 bg-white shadow-lg">
+      <div class="flex-1 flex flex-col min-h-0 bg-gradient-to-b from-white to-gray-50 border-r border-gray-200 shadow-lg backdrop-blur-sm">
         <!-- Sidebar header -->
-        <div class="flex items-center h-16 px-4 border-b border-gray-200">
-          <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent">
+        <div class="flex items-center h-16 px-4 border-b border-gray-200 bg-gradient-to-r from-white to-primary-100/30">
+          <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-primary-800 to-primary-600 bg-clip-text text-transparent">
             Nexcode
           </NuxtLink>
         </div>
@@ -26,8 +18,8 @@
             :to="item.to"
             :class="[
               isCurrentRoute(item.to)
-                ? 'bg-primary/20 text-primary'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                ? 'bg-gradient-to-r from-primary/20 to-primary-600/10 text-primary'
+                : 'text-gray-600 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 hover:text-gray-900',
               'group flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200'
             ]"
           >
@@ -35,7 +27,7 @@
               :is="item.icon"
               :class="[
                 isCurrentRoute(item.to) ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500',
-                'mr-3 h-5 w-5'
+                'mr-3 h-5 w-5 transition-colors duration-200'
               ]"
               aria-hidden="true"
             />
@@ -44,7 +36,7 @@
         </nav>
 
         <!-- User menu (desktop) -->
-        <div class="border-t border-gray-200 p-3">
+        <div class="border-t border-gray-200 p-3 bg-gradient-to-r from-white/90 to-primary-100/30">
           <UserMenu />
         </div>
       </div>
@@ -53,11 +45,11 @@
     <!-- Main content -->
     <div class="lg:pl-64 flex flex-col min-h-screen">
       <!-- Top header -->
-      <header class="sticky top-0 z-10 bg-white border-b border-gray-200 lg:hidden">
+      <header class="sticky top-0 z-10 bg-gradient-to-r from-white/90 to-primary-100/30 backdrop-blur-md border-b border-gray-200 lg:hidden">
         <div class="px-4">
           <div class="flex justify-between h-16">
             <div class="flex items-center">
-              <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-primary to-primary-600 bg-clip-text text-transparent">
+              <NuxtLink to="/" class="text-2xl font-bold bg-gradient-to-r from-primary-800 to-primary-600 bg-clip-text text-transparent">
                 Nexcode
               </NuxtLink>
             </div>
@@ -88,10 +80,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import MobileNav from '~/protected/components/dashboard/navigation/MobileNav.vue'
 import DashboardIcon from '~/protected/components/dashboard/icons/DashboardIcon.vue'
-import ProjectsIcon from '~/protected/components/dashboard/icons/ProjectsIcon.vue'
-import GenerateIcon from '~/protected/components/dashboard/icons/GenerateIcon.vue'
+import WebsiteIcon from '~/protected/components/dashboard/icons/WebsiteIcon.vue'
+import SupportIcon from '~/protected/components/dashboard/icons/SupportIcon.vue'
+import BillingIcon from '~/protected/components/dashboard/icons/BillingIcon.vue'
 
 const route = useRoute()
 const isSidebarOpen = ref(false)
@@ -104,14 +99,19 @@ const navigationItems = [
     icon: DashboardIcon
   },
   {
-    name: 'Projects',
-    to: '/dashboard/projects',
-    icon: ProjectsIcon
+    name: 'Website Overview',
+    to: '/dashboard/website-overview',
+    icon: WebsiteIcon
   },
   {
-    name: 'Generate',
-    to: '/dashboard/generate',
-    icon: GenerateIcon
+    name: 'Billing',
+    to: '/dashboard/billing',
+    icon: BillingIcon
+  },
+  {
+    name: 'Support',
+    to: '/dashboard/support',
+    icon: SupportIcon
   },
 ]
 

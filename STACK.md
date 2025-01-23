@@ -45,15 +45,18 @@
 │   ├── components
 │   │   ├── dashboard
 │   │   │   ├── cards
-│   │   │   └── navigation
+│   │   │   ├── navigation
+│   │   │   └── billing
 │   │   └── settings
 │   ├── layouts
 │   │   └── dashboard.vue
 │   └── pages
 │       └── dashboard
 │           ├── index.vue
-│           ├── projects.vue
-│           └── settings.vue
+│           ├── settings.vue
+│           ├── support
+│           ├── website-overview.vue
+│           └── billing
 ├── public
 │   ├── favicon.ico
 │   └── robots.txt
@@ -157,8 +160,10 @@
   - Consultation (/consultation)
 - Dashboard [Protected]
   - Main Dashboard (/dashboard)
-  - Projects (/dashboard/projects)
   - Settings (/dashboard/settings)
+  - Support (/dashboard/support)
+  - Website Overview (/dashboard/website-overview)
+  - Billing (/dashboard/billing)
 - Authentication
   - Login (/login)
   - Register (/register)

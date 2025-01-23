@@ -6,6 +6,28 @@ interface WebhookError extends Error {
   data?: unknown
 }
 
+interface Attachment {
+  data: string
+  mimeType: string
+  fileName: string
+  fileSize: number
+  contentType: string
+}
+
+interface SupportRequest {
+  subject: string
+  category: string
+  priority: string
+  description: string
+  user: {
+    id: string
+    email: string
+    name: string
+  }
+  timestamp: string
+  attachments: Attachment[]
+}
+
 export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig()
   
@@ -22,40 +44,51 @@ export default defineEventHandler(async (event: H3Event) => {
       })
     }
 
-    const body = await readBody(event)
+    const body = await readBody(event) as SupportRequest
+    
+    // Validate request body
+    if (!body.subject || !body.category || !body.priority || !body.description) {
+      throw createError({
+        statusCode: 400,
+        message: 'Missing required fields'
+      })
+    }
+
+    // Validate attachments
+    if (body.attachments?.length) {
+      body.attachments.forEach((attachment, index) => {
+        if (!attachment.data || !attachment.fileName || !attachment.contentType) {
+          console.error('Invalid attachment:', {
+            index,
+            hasData: !!attachment.data,
+            hasFileName: !!attachment.fileName,
+            hasContentType: !!attachment.contentType
+          })
+          throw createError({
+            statusCode: 400,
+            message: `Invalid attachment at index ${index}: missing required fields`
+          })
+        }
+      })
+    }
     
     // Construct the full webhook URL
     const webhookUrl = `${config.n8nBaseUrl}${config.n8nWebhookPath}`
     
-    // Check if n8n is accessible
-    try {
-      const healthCheck = await fetch(config.n8nBaseUrl, {
-        method: 'GET',
-        signal: AbortSignal.timeout(5000) // 5 second timeout
-      })
-      if (!healthCheck.ok) {
-        throw createError({
-          statusCode: 503,
-          message: 'N8N server is not responding'
-        })
-      }
-    } catch (error) {
-      console.error('N8N health check failed:', error)
-      throw createError({
-        statusCode: 503,
-        message: 'Unable to connect to N8N server. Please ensure N8N is running.'
-      })
-    }
-    
     console.log('Request details:', {
       url: webhookUrl,
       method: 'POST',
-      body: body,
+      body: {
+        ...body,
+        attachments: body.attachments?.map(a => ({ 
+          fileName: a.fileName, 
+          contentType: a.contentType, 
+          fileSize: a.fileSize 
+        })) // Log attachment metadata only
+      },
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Origin': 'http://localhost:3000',
-        'Connection': 'keep-alive'
+        'Accept': 'application/json'
       }
     })
     
@@ -64,13 +97,24 @@ export default defineEventHandler(async (event: H3Event) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Origin': 'http://localhost:3000',
-        'Connection': 'keep-alive'
+        'Accept': 'application/json'
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(10000) // 10 second timeout
     })
+
+    const contentType = response.headers.get('content-type')
+    if (!contentType?.includes('application/json')) {
+      console.error('N8N webhook returned non-JSON response:', {
+        status: response.status,
+        contentType,
+        url: webhookUrl
+      })
+      throw createError({
+        statusCode: 503,
+        message: 'N8N webhook returned invalid response format'
+      })
+    }
 
     const responseText = await response.text()
     console.log('N8N Response:', {
@@ -80,31 +124,34 @@ export default defineEventHandler(async (event: H3Event) => {
       body: responseText
     })
 
-    if (!response.ok) {
-      console.error('N8N webhook error:', {
-        status: response.status,
-        statusText: response.statusText,
-        body: responseText,
-        url: webhookUrl
-      })
-      
-      throw createError({
-        statusCode: response.status,
-        message: `N8N webhook error: ${response.statusText}`,
-        data: responseText
-      })
-    }
-
+    // Parse response text as JSON if possible
     let data
     try {
       data = JSON.parse(responseText)
-    } catch {
-      console.log('Response was not JSON:', responseText)
-      data = { raw: responseText }
+    } catch (error) {
+      console.error('Failed to parse N8N response:', {
+        error,
+        responseText,
+        contentType
+      })
+      throw createError({
+        statusCode: 503,
+        message: 'Invalid response from N8N server'
+      })
     }
 
-    console.log('N8N webhook success:', data)
-    return { success: true, data }
+    // Consider any response with message "Workflow was started" as success
+    if (data.message === 'Workflow was started' || response.ok) {
+      console.log('N8N webhook success:', data)
+      return { success: true, data }
+    }
+
+    // Any other response is considered an error
+    throw createError({
+      statusCode: response.status,
+      message: data.message || 'N8N webhook error',
+      data: data
+    })
   } catch (error: unknown) {
     const err = error as WebhookError
     console.error('Webhook forwarding error:', {

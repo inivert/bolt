@@ -30,7 +30,7 @@
           </p>
           <div class="mt-8 flex flex-col items-center space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 lg:justify-start">
             <NuxtLink 
-              to="/contact"
+              to="/consultation"
               class="group inline-flex items-center rounded-full bg-gradient-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:opacity-90 hover:shadow-primary-400/25"
             >
               Schedule Consultation
