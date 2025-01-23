@@ -17,65 +17,59 @@
         <div class="text-center lg:text-left">
           <div class="inline-flex items-center rounded-full bg-primary-100 px-4 py-2 text-sm font-medium text-primary">
             <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
             </svg>
-            Transform AI Prompts Instantly
+            Professional Web Development
           </div>
-          <h1 class="mt-6 animate-fade-in text-4xl font-bold leading-tight text-gray-900 md:text-5xl lg:text-6xl">
-            Turn Basic Prompts Into
-            <span class="relative block mt-2">
-              <span class="relative inline-block bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 bg-clip-text text-transparent font-extrabold tracking-tight drop-shadow-sm transition-all duration-300 hover:scale-[1.01] pb-3">
-                AI Development Magic
-              </span>
-              <!-- Enhanced underline effect -->
-              <span class="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 rounded-full transform origin-left transition-transform duration-300 hover:scale-x-105"></span>
-            </span>
+          <h1 class="text-5xl font-bold text-dark md:text-6xl lg:text-7xl">
+            <span class="bg-gradient-primary bg-clip-text text-transparent">Custom Websites</span> for Your
+            <span class="bg-gradient-accent bg-clip-text text-transparent">Growing Business</span>
           </h1>
-          <p class="mt-6 animate-slide-up text-lg text-gray-600">
-            Nexcode transforms your simple prompts into powerful, context-aware instructions. Perfect for AI coding assistants like Cursor, Nexcode, and more. Pay only for what you use.
+          <p class="mt-6 text-lg text-dark/80 md:text-xl">
+            I build beautiful, modern websites that help small businesses grow. Get a professional online presence with ongoing support and maintenance, all for an affordable monthly subscription.
           </p>
           <div class="mt-8 flex flex-col items-center space-y-4 sm:flex-row sm:justify-center sm:space-x-4 sm:space-y-0 lg:justify-start">
             <NuxtLink 
-              :to="user ? '/dashboard' : '/register'"
-              class="group inline-flex items-center rounded-full bg-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:bg-primary-600 hover:shadow-primary/25"
+              to="/contact"
+              class="group inline-flex items-center rounded-full bg-gradient-primary px-8 py-3 text-lg font-semibold text-white shadow-lg transition-all hover:opacity-90 hover:shadow-primary-400/25"
             >
-              {{ user ? 'Go to Dashboard' : 'Get Started Free' }}
+              Schedule Consultation
               <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
             </NuxtLink>
             <NuxtLink 
-              to="/how-it-works" 
+              to="/portfolio" 
               class="group inline-flex items-center rounded-full border-2 border-primary/10 bg-white/50 px-8 py-3 text-lg font-semibold text-primary backdrop-blur-sm transition-all hover:border-primary hover:bg-primary-50"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
               </svg>
-              See How It Works
+              View Portfolio
             </NuxtLink>
           </div>
           
           <!-- Trust Badges -->
           <div class="mt-12 rounded-2xl bg-white/60 p-6 backdrop-blur-sm lg:max-w-2xl shadow-lg">
-            <p class="text-sm font-semibold text-gray-500">Trusted by developers using:</p>
+            <p class="text-sm font-semibold text-gray-500">Why Businesses Trust Me:</p>
             <div class="mt-4 flex flex-wrap items-center gap-6">
               <div class="flex items-center space-x-2 rounded-lg bg-primary-50 px-4 py-2 text-primary transition-all hover:bg-primary-100">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="font-medium">Cursor</span>
+                <span class="font-medium">Fast Delivery</span>
               </div>
               <div class="flex items-center space-x-2 rounded-lg bg-secondary-50 px-4 py-2 text-secondary transition-all hover:bg-secondary-100">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                <span class="font-medium">Nexcode</span>
+                <span class="font-medium">100% Secure</span>
               </div>
               <div class="flex items-center space-x-2 rounded-lg bg-accent-50 px-4 py-2 text-accent transition-all hover:bg-accent-100">
                 <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <span class="font-medium">Windsurf</span>
+                <span class="font-medium">24/7 Support</span>
               </div>
             </div>
           </div>
@@ -91,11 +85,13 @@
                   <div class="h-3 w-3 rounded-full bg-yellow-400"></div>
                   <div class="h-3 w-3 rounded-full bg-green-400"></div>
                 </div>
+                <!-- Code Editor Preview -->
                 <div class="space-y-3">
                   <div class="h-4 w-3/4 rounded-full bg-primary-100"></div>
                   <div class="h-4 w-full rounded-full bg-secondary-100"></div>
                   <div class="h-4 w-2/3 rounded-full bg-accent-100"></div>
                 </div>
+                <!-- Website Preview -->
                 <div class="flex items-center justify-between rounded-xl bg-gradient-to-r from-primary-50 via-secondary-50 to-accent-50 p-4">
                   <div class="space-y-2">
                     <div class="h-2 w-24 rounded-full bg-primary-200"></div>
@@ -110,7 +106,7 @@
           <!-- Floating Elements -->
           <div class="absolute -right-4 top-1/4 animate-float" style="animation-delay: 1s;">
             <div class="rounded-xl bg-gradient-to-br from-primary to-secondary p-3 shadow-lg">
-              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="h-6 w-6 text-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -118,7 +114,7 @@
           <div class="absolute -left-4 bottom-1/4 animate-float" style="animation-delay: 2s;">
             <div class="rounded-xl bg-gradient-to-br from-secondary to-accent p-3 shadow-lg">
               <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
           </div>

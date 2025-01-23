@@ -89,75 +89,29 @@
 
 <script setup lang="ts">
 import MobileNav from '~/protected/components/dashboard/navigation/MobileNav.vue'
+import DashboardIcon from '~/protected/components/dashboard/icons/DashboardIcon.vue'
+import ProjectsIcon from '~/protected/components/dashboard/icons/ProjectsIcon.vue'
+import GenerateIcon from '~/protected/components/dashboard/icons/GenerateIcon.vue'
 
 const route = useRoute()
 const isSidebarOpen = ref(false)
-
-// SVG path constants
-const SVG_PATHS = {
-  DASHBOARD: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-  PROJECTS: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
-  GENERATE: 'M15 4.88l-3-3m0 0l-3 3m3-3v13.88m-3.88-3l3 3m0 0l3-3m-3 3V4.88M4.27 19.73L19.73 4.27m0 0L15 4.88m4.73-.61v4.34M4.27 19.73L8.61 19m-4.34.73V15'
-}
 
 // Navigation items with icons
 const navigationItems = [
   {
     name: 'Dashboard',
     to: '/dashboard',
-    icon: defineComponent({
-      render: () => h('svg', { 
-        class: 'h-5 w-5',
-        fill: 'none',
-        viewBox: '0 0 24 24',
-        stroke: 'currentColor'
-      }, [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          'stroke-width': '2',
-          d: SVG_PATHS.DASHBOARD
-        })
-      ])
-    })
+    icon: DashboardIcon
   },
   {
     name: 'Projects',
     to: '/dashboard/projects',
-    icon: defineComponent({
-      render: () => h('svg', {
-        class: 'h-5 w-5',
-        fill: 'none',
-        viewBox: '0 0 24 24',
-        stroke: 'currentColor'
-      }, [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          'stroke-width': '2',
-          d: SVG_PATHS.PROJECTS
-        })
-      ])
-    })
+    icon: ProjectsIcon
   },
   {
     name: 'Generate',
     to: '/dashboard/generate',
-    icon: defineComponent({
-      render: () => h('svg', {
-        class: 'h-5 w-5',
-        fill: 'none',
-        viewBox: '0 0 24 24',
-        stroke: 'currentColor'
-      }, [
-        h('path', {
-          'stroke-linecap': 'round',
-          'stroke-linejoin': 'round',
-          'stroke-width': '2',
-          d: SVG_PATHS.GENERATE
-        })
-      ])
-    })
+    icon: GenerateIcon
   },
 ]
 

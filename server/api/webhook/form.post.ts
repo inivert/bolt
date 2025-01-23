@@ -1,11 +1,12 @@
 import { defineEventHandler, readBody, createError } from 'h3'
+import type { H3Event } from 'h3'
 
 interface WebhookError extends Error {
   statusCode?: number
   data?: unknown
 }
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event: H3Event) => {
   const config = useRuntimeConfig()
   
   try {

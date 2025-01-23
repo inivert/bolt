@@ -5,17 +5,29 @@ import forms from '@tailwindcss/forms'
 
 const colors = {
   primary: {
-    '50': '#f0f7ff',
-    '100': '#e0f0ff',
-    '200': '#bde0ff',
-    '300': '#84caff',
-    '400': '#44aeff',
-    '500': '#1a91ff',
-    '600': '#0070f3',
-    '700': '#0058cc',
-    '800': '#0046a6',
-    '900': '#003380',
-    DEFAULT: '#0070f3'
+    50: '#FFF5ED',
+    100: '#FFE6D4',
+    200: '#FAB488',
+    300: '#F99460',
+    400: '#F6691E',
+    500: '#EA5008',
+    600: '#EB5716',
+    700: '#CB0108',
+    800: '#980414',
+    900: '#A40A08',
+  },
+  dark: {
+    DEFAULT: '#100C12',
+    50: '#2A242F',
+    100: '#241F29',
+    200: '#1E1A23',
+    300: '#19151D',
+    400: '#141017',
+    500: '#100C12',
+    600: '#0B080D',
+    700: '#060407',
+    800: '#020102',
+    900: '#000000',
   },
   secondary: {
     '50': '#fff5f5',
@@ -103,6 +115,11 @@ export default {
         sm: '0 1px 2px var(--tw-shadow-color)',
         DEFAULT: '0 2px 4px var(--tw-shadow-color)',
         lg: '0 8px 16px var(--tw-shadow-color)',
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, #F6691E, #EA5008)',
+        'gradient-secondary': 'linear-gradient(to right, #FAB488, #F99460)',
+        'gradient-accent': 'linear-gradient(to right, #CB0108, #980414)',
       },
     }
   },

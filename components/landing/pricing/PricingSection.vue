@@ -1,178 +1,98 @@
 <template>
-  <section id="pricing" ref="target" class="py-20 bg-gray-50">
+  <section class="py-20">
     <div class="container mx-auto px-4">
       <!-- Section Header -->
-      <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-3xl font-bold text-gray-900 md:text-4xl">
-          Simple, Transparent Pricing
+      <div class="text-center">
+        <h2 class="text-4xl font-bold text-dark">
+          Simple, <span class="bg-gradient-primary bg-clip-text text-transparent">Transparent</span> Pricing
         </h2>
-        <p class="mt-4 text-lg text-gray-600">
-          Choose the perfect plan for your needs. Only pay for what you use with our flexible credit system.
+        <p class="mt-4 text-lg text-dark/80">
+          Start for free, upgrade when you need more. No hidden fees.
         </p>
       </div>
-
-      <!-- Pricing Cards -->
-      <div 
-        v-auto-animate 
-        class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-      >
-        <div
-          v-for="plan in plans"
-          :key="plan.id"
-          class="relative rounded-2xl p-8 transition-all hover:shadow-xl"
-          :class="[
-            plan.popular ? 'bg-primary' : 'bg-white',
-            'shadow-lg'
-          ]"
-          :style="{ transitionDelay: `${plan.id * ANIMATION_DELAY_MS}ms` }"
-        >
-          <div 
-            v-if="plan.popular" 
-            class="absolute -top-5 right-8 rounded-full bg-gradient-to-r from-red-500 to-blue-500 px-6 py-2 text-sm font-bold text-white shadow-lg z-10 transform hover:scale-105 transition-transform duration-200 border-2 border-white"
+      
+      <div class="mt-16 grid gap-8 lg:grid-cols-3">
+        <!-- Free Tier -->
+        <div class="relative rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-md">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-dark">Free</h3>
+            <span class="rounded-full bg-primary-100 px-3 py-1 text-sm text-primary-700">Limited</span>
+          </div>
+          <p class="mt-4 text-dark/70">Perfect for trying out Nexcode</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-dark">$0</span>
+            <span class="text-dark/60">/month</span>
+          </div>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-center text-dark/80">
+              <CheckIcon class="h-5 w-5 text-primary-500 mr-2" />
+              100 prompts/month
+            </li>
+          </ul>
+          <NuxtLink
+            to="/register"
+            class="mt-8 block w-full rounded-full bg-gradient-primary px-6 py-3 text-center font-semibold text-white transition-all hover:opacity-90"
           >
+            Get Started
+          </NuxtLink>
+        </div>
+
+        <!-- Pro Tier -->
+        <div class="relative rounded-2xl bg-gradient-to-br from-primary-400 to-primary-600 p-8 shadow-md transition-all duration-300 hover:shadow-lg">
+          <div class="absolute -top-5 right-8 rounded-full bg-gradient-accent px-4 py-1 text-sm font-semibold text-white shadow-sm">
             Popular
           </div>
-          <div 
-            class="relative transition-all"
-            :class="{ 'opacity-0 translate-y-4': !isVisible, 'opacity-100 translate-y-0': isVisible }"
-          >
-            <h3 class="text-xl font-semibold" :class="plan.popular ? 'text-white' : 'text-gray-900'">
-              {{ plan.name }}
-            </h3>
-            <div class="mt-4 flex items-baseline">
-              <span class="text-4xl font-bold" :class="plan.popular ? 'text-white' : 'text-gray-900'">
-                ${{ plan.price }}
-              </span>
-              <span class="ml-1" :class="plan.popular ? 'text-white/80' : 'text-gray-600'">/month</span>
-            </div>
-            <p class="mt-2 text-sm" :class="plan.popular ? 'text-white/80' : 'text-gray-600'">
-              {{ plan.description }}
-            </p>
-
-            <ul class="mt-8 space-y-4">
-              <li 
-                v-for="feature in plan.features" 
-                :key="feature"
-                class="flex items-center"
-              >
-                <svg class="h-5 w-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <span class="ml-3" :class="plan.popular ? 'text-white' : 'text-gray-600'">
-                  {{ feature }}
-                </span>
-              </li>
-            </ul>
-
-            <button
-              class="mt-8 w-full rounded-full px-6 py-3 transition-colors"
-              :class="[
-                plan.popular 
-                  ? 'bg-white text-primary hover:bg-accent hover:text-white'
-                  : 'border-2 border-primary bg-white text-primary hover:bg-primary hover:text-white'
-              ]"
-              @click="handlePlanSelection(plan)"
-            >
-              {{ plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started' }}
-            </button>
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-white">Pro</h3>
+            <span class="rounded-full bg-white/20 px-3 py-1 text-sm text-white">Unlimited</span>
           </div>
+          <p class="mt-4 text-white/80">For professional developers</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-white">$29</span>
+            <span class="text-white/80">/month</span>
+          </div>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-center text-white/90">
+              <CheckIcon class="h-5 w-5 text-white mr-2" />
+              Unlimited prompts
+            </li>
+          </ul>
+          <NuxtLink
+            to="/register"
+            class="mt-8 block w-full rounded-full bg-white px-6 py-3 text-center font-semibold text-primary-500 transition-all hover:bg-white/90"
+          >
+            Get Started
+          </NuxtLink>
         </div>
-      </div>
 
-      <!-- Additional Info -->
-      <div class="mt-12 text-center">
-        <p class="text-gray-600">
-          All plans include unlimited access to our documentation and community support.
-          <br />Need more credits? Additional credits can be purchased at any time.
-        </p>
-        <p v-if="selectedPlan" class="mt-4 text-sm font-medium text-primary">
-          Selected plan: {{ selectedPlan }}
-        </p>
+        <!-- Enterprise Tier -->
+        <div class="relative rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-md">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-dark">Enterprise</h3>
+            <span class="rounded-full bg-primary-100 px-3 py-1 text-sm text-primary-700">Custom</span>
+          </div>
+          <p class="mt-4 text-dark/70">For large teams & organizations</p>
+          <div class="mt-6">
+            <span class="text-4xl font-bold text-dark">Custom</span>
+          </div>
+          <ul class="mt-8 space-y-4">
+            <li class="flex items-center text-dark/80">
+              <CheckIcon class="h-5 w-5 text-primary-500 mr-2" />
+              Custom solutions
+            </li>
+          </ul>
+          <NuxtLink
+            to="/contact"
+            class="mt-8 block w-full rounded-full bg-gradient-primary px-6 py-3 text-center font-semibold text-white transition-all hover:opacity-90"
+          >
+            Contact Sales
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useIntersectionObserver } from '@vueuse/core'
-import { useLocalStorage } from '@vueuse/core'
-import { ref } from 'vue'
-import type { Plan } from '~/types/pricing'
-import { useRouter } from 'vue-router'
-
-const ANIMATION_DELAY_MS = 100
-const router = useRouter()
-const user = useSupabaseUser()
-
-const plans = ref<Plan[]>([
-  {
-    id: 1,
-    name: 'Starter',
-    price: 10,
-    description: 'Perfect for getting started',
-    features: [
-      '100 Credits/month',
-      'Basic prompt enhancement',
-      'Email support'
-    ],
-    color: 'primary',
-    popular: false
-  },
-  {
-    id: 2,
-    name: 'Pro',
-    price: 29,
-    description: 'Best for growing teams',
-    features: [
-      '500 Credits/month',
-      'Advanced prompt enhancement',
-      'Visual reference analysis',
-      'Priority support'
-    ],
-    color: 'primary',
-    popular: true
-  },
-  {
-    id: 3,
-    name: 'Enterprise',
-    price: 99,
-    description: 'For large teams & organizations',
-    features: [
-      '2000 Credits/month',
-      'Custom prompt templates',
-      'Team collaboration',
-      '24/7 priority support',
-      'Custom integrations'
-    ],
-    color: 'primary',
-    popular: false
-  }
-])
-
-const target = ref(null)
-const isVisible = ref(false)
-
-const handlePlanSelection = (plan: Plan) => {
-  selectPlan(plan.name)
-  if (plan.name === 'Enterprise') {
-    router.push('/contact')
-  } else if (user.value) {
-    router.push('/dashboard')
-  } else {
-    router.push('/register')
-  }
-}
-
-// Intersection observer setup
-useIntersectionObserver(target, ([{ isIntersecting }]: IntersectionObserverEntry[]) => {
-  if (isIntersecting) {
-    isVisible.value = true
-  }
-})
-
-const selectedPlan = useLocalStorage<string>('selected-plan', '')
-
-function selectPlan(planName: string): void {
-  selectedPlan.value = planName
-}
+import { CheckIcon } from '@heroicons/vue/24/solid'
 </script>

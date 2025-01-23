@@ -33,10 +33,12 @@
             <span class="text-gray-500">Created:</span>
             <span class="font-medium">{{ formatDate(createdAt) }}</span>
           </div>
-          <div :class="[
-            'px-2 py-1 rounded-full text-xs font-medium',
-            statusClasses[status]
-          ]">
+          <div
+            :class="[
+              'px-2 py-1 rounded-full text-xs font-medium',
+              statusClasses[status]
+            ]"
+          >
             {{ status }}
           </div>
         </div>

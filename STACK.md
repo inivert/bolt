@@ -8,6 +8,9 @@
 ├── app.vue
 ├── assets
 ├── components
+│   ├── consultation
+│   │   ├── ConsultationForm.vue
+│   │   └── ConsultationHero.vue
 │   ├── landing
 │   │   ├── features
 │   │   │   └── FeaturesSection.vue
@@ -151,6 +154,7 @@
   - About (/about)
   - Blog (/blog)
   - Contact (/contact)
+  - Consultation (/consultation)
 - Dashboard [Protected]
   - Main Dashboard (/dashboard)
   - Projects (/dashboard/projects)

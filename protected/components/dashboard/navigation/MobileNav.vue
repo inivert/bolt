@@ -83,12 +83,14 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from 'vue'
+
 defineProps<{
   isOpen: boolean
   navigationItems: Array<{
     name: string
     to: string
-    icon: any
+    icon: Component
   }>
 }>()
 

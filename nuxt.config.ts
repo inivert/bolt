@@ -39,7 +39,11 @@ export default defineNuxtConfig({
       title: 'Nexcode',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Transform your prompts into powerful, context-aware instructions with Nexcode' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/images/favicon.svg' }
       ]
     }
   },
@@ -49,7 +53,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
-      exclude: ['/', '/register', '/login', '/confirm', '/reset-password', '/features', '/pricing', '/how-it-works', '/about', '/blog', '/contact', '/privacy', '/terms']
+      exclude: ['/', '/register', '/login', '/confirm', '/reset-password', '/features', '/pricing', '/how-it-works', '/about', '/blog', '/contact', '/privacy', '/terms', '/consultation']
     },
     cookieOptions: {
       maxAge: COOKIE_MAX_AGE_SECONDS,

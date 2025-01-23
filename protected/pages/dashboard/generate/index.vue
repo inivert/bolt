@@ -8,7 +8,7 @@
       <div class="py-4">
         <div class="bg-white shadow-lg sm:rounded-2xl overflow-hidden">
           <div class="px-4 py-5 sm:p-6">
-            <form @submit.prevent="handleSubmit" class="space-y-8">
+            <form class="space-y-8" @submit.prevent="handleSubmit">
               <!-- Quick Presets -->
               <div class="space-y-4">
                 <h3 class="text-lg font-medium leading-6 text-gray-900 flex items-center">
@@ -17,16 +17,16 @@
                 </h3>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <button
-                    type="button"
                     v-for="preset in presets"
                     :key="preset.name"
-                    @click="applyPreset(preset)"
+                    type="button"
                     :class="[
                       isPresetSelected(preset)
                         ? 'ring-2 ring-primary-500 border-primary-500'
                         : 'border-gray-200 hover:border-primary-500/50',
                       'relative flex flex-col items-start p-4 border-2 rounded-xl focus:outline-none transition-all duration-200 group bg-white hover:shadow-md'
                     ]"
+                    @click="applyPreset(preset)"
                   >
                     <div class="absolute inset-0 bg-gradient-to-br from-primary-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-xl"></div>
                     <div class="relative flex items-center justify-between w-full">
@@ -66,11 +66,11 @@
                 <TransitionRoot
                   :show="open"
                   enter="transition-all duration-300 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
+                  enter-from="transform scale-95 opacity-0"
+                  enter-to="transform scale-100 opacity-100"
                   leave="transition-all duration-200 ease-in"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
+                  leave-from="transform scale-100 opacity-100"
+                  leave-to="transform scale-95 opacity-0"
                 >
                   <DisclosurePanel class="px-4 py-4 origin-top">
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -86,13 +86,13 @@
                             v-for="stack in frontendStacks"
                             :key="stack.value"
                             type="button"
-                            @click="formData.frontendStack = formData.frontendStack === stack.value ? '' : stack.value"
                             :class="[
                               formData.frontendStack === stack.value
                                 ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
                                 : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
                             ]"
+                            @click="formData.frontendStack = formData.frontendStack === stack.value ? '' : stack.value"
                           >
                             <span class="flex items-center">
                               {{ stack.label }}
@@ -118,7 +118,6 @@
                             v-for="library in uiLibraries"
                             :key="library.value"
                             type="button"
-                            @click="toggleUILibrary(library)"
                             :disabled="!canSelectLibrary(library) && !formData.uiLibraries.includes(library.value)"
                             :class="[
                               formData.uiLibraries.includes(library.value)
@@ -128,6 +127,7 @@
                                   : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative group'
                             ]"
+                            @click="toggleUILibrary(library)"
                           >
                             <span class="flex items-center">
                               {{ library.label }}
@@ -168,13 +168,13 @@
                             v-for="stack in backendStacks"
                             :key="stack.value"
                             type="button"
-                            @click="formData.backendStack = formData.backendStack === stack.value ? '' : stack.value"
                             :class="[
                               formData.backendStack === stack.value
                                 ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
                                 : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
                             ]"
+                            @click="formData.backendStack = formData.backendStack === stack.value ? '' : stack.value"
                           >
                             <span class="flex items-center">
                               {{ stack.label }}
@@ -199,13 +199,13 @@
                             v-for="provider in backendProviders"
                             :key="provider.value"
                             type="button"
-                            @click="formData.backendProvider = formData.backendProvider === provider.value ? '' : provider.value"
                             :class="[
                               formData.backendProvider === provider.value
                                 ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
                                 : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
                             ]"
+                            @click="formData.backendProvider = formData.backendProvider === provider.value ? '' : provider.value"
                           >
                             <span class="flex items-center">
                               {{ provider.label }}
@@ -230,7 +230,6 @@
                             v-for="tool in buildTools"
                             :key="tool.value"
                             type="button"
-                            @click="formData.buildTool = formData.buildTool === tool.value ? '' : tool.value"
                             :disabled="!isBuildToolCompatible(tool, formData.frontendStack)"
                             :class="[
                               formData.buildTool === tool.value
@@ -240,6 +239,7 @@
                                   : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
                             ]"
+                            @click="formData.buildTool = formData.buildTool === tool.value ? '' : tool.value"
                           >
                             <span class="flex items-center">
                               {{ tool.label }}
@@ -268,13 +268,13 @@
                             v-for="manager in packageManagers"
                             :key="manager.value"
                             type="button"
-                            @click="formData.packageManager = formData.packageManager === manager.value ? '' : manager.value"
                             :class="[
                               formData.packageManager === manager.value
                                 ? 'bg-primary-50 text-primary-700 ring-2 ring-primary-500 border-transparent'
                                 : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-200',
                               'inline-flex flex-col items-start px-3 py-2 rounded-lg border text-sm font-medium focus:outline-none transition-all duration-200 hover:shadow-sm relative'
                             ]"
+                            @click="formData.packageManager = formData.packageManager === manager.value ? '' : manager.value"
                           >
                             <span class="flex items-center">
                               {{ manager.label }}
@@ -299,7 +299,8 @@
                     AI Prompt
                     <span class="text-sm ml-2 text-gray-500">(Minimum 50 characters)</span>
                   </label>
-                  <span :class="[
+                  <span
+:class="[
                     formData.prompt?.length >= 1800 ? 'text-yellow-500' : 'text-gray-500',
                     'text-sm transition-colors duration-200'
                   ]">
@@ -366,20 +367,20 @@
 
             <!-- Notification -->
             <TransitionRoot
-              :show="showMessage"
               appear
               as="div"
+              :show="showMessage"
             >
               <div class="fixed inset-0 z-10 overflow-y-auto">
                 <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                   <TransitionChild
                     as="div"
                     enter="ease-out duration-300"
-                    enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    enterTo="opacity-100 translate-y-0 sm:scale-100"
+                    enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    enter-to="opacity-100 translate-y-0 sm:scale-100"
                     leave="ease-in duration-200"
-                    leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                    leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    leave-from="opacity-100 translate-y-0 sm:scale-100"
+                    leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     :show="showMessage"
                   >
                     <div
@@ -389,7 +390,8 @@
                       ]"
                     >
                       <div>
-                        <div :class="[
+                        <div
+:class="[
                           'mx-auto flex h-12 w-12 items-center justify-center rounded-full',
                           isError ? 'bg-red-100' : 'bg-green-100'
                         ]">
@@ -742,14 +744,14 @@ const isUILibraryCompatible = (library: typeof uiLibraries[0], framework: string
   if (!framework) return true
   const baseFramework = getBaseFramework(framework)
   return library.compatibleWith.includes(framework as Framework) || 
-         (baseFramework && library.compatibleWith.includes(baseFramework))
+         (baseFramework !== null && library.compatibleWith.includes(baseFramework))
 }
 
 const isBuildToolCompatible = (tool: typeof buildTools[0], framework: string): boolean => {
+  if (!framework) return true
   const baseFramework = getBaseFramework(framework)
-  if (!baseFramework) return true
   return tool.compatibleWith.includes(framework as Framework) || 
-         tool.compatibleWith.includes(baseFramework)
+         (baseFramework !== null && tool.compatibleWith.includes(baseFramework))
 }
 
 const hasRequiredDependencies = (library: typeof uiLibraries[0]): boolean => {

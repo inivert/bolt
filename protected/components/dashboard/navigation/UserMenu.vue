@@ -1,9 +1,9 @@
 <template>
-  <div class="relative inline-block" ref="menuRef">
+  <div ref="menuRef" class="relative inline-block">
     <!-- User menu button -->
     <button
-      @click="isOpen = !isOpen"
       class="flex items-center gap-2 p-2 rounded-lg transition-all duration-200 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/20"
+      @click="isOpen = !isOpen"
     >
       <!-- Avatar -->
       <div class="relative w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
@@ -33,8 +33,8 @@
 
       <!-- Dropdown arrow -->
       <svg
-        class="w-4 h-4 text-gray-600 transition-transform duration-200"
         :class="{ 'rotate-180': isOpen }"
+        class="w-4 h-4 text-gray-600 transition-transform duration-200"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -59,10 +59,10 @@
     >
       <div
         v-if="isOpen"
-        class="absolute bottom-full left-0 mb-1 ml-2 w-64 rounded-lg bg-white shadow-xl ring-1 ring-black/5 focus:outline-none z-[100]"
         :class="[
           'max-h-[calc(100vh-4rem)] overflow-y-auto'
         ]"
+        class="absolute bottom-full left-0 mb-1 ml-2 w-64 rounded-lg bg-white shadow-xl ring-1 ring-black/5 focus:outline-none z-[100]"
       >
         <!-- User info (mobile only) -->
         <div class="lg:hidden px-4 py-3 border-b border-gray-100">
@@ -104,8 +104,8 @@
           </NuxtLink>
 
           <button
-            @click="handleSignOut"
             class="group flex w-full items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+            @click="handleSignOut"
           >
             <svg
               class="h-4 w-4 text-gray-400 group-hover:text-red-500 transition-colors duration-200"
