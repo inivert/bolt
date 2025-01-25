@@ -6,6 +6,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export type UserRole = 'user' | 'admin'
+
 export interface Database {
   public: {
     Tables: {
@@ -19,7 +21,7 @@ export interface Database {
           updated_at: string | null
           last_sign_in: string | null
           is_active: boolean
-          role: 'user' | 'admin'
+          role: UserRole
         }
         Insert: {
           id?: string
@@ -30,7 +32,7 @@ export interface Database {
           updated_at?: string | null
           last_sign_in?: string | null
           is_active?: boolean
-          role?: 'user' | 'admin'
+          role?: UserRole
         }
         Update: {
           id?: string
@@ -41,7 +43,7 @@ export interface Database {
           updated_at?: string | null
           last_sign_in?: string | null
           is_active?: boolean
-          role?: 'user' | 'admin'
+          role?: UserRole
         }
       }
     }
@@ -49,7 +51,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

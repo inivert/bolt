@@ -80,40 +80,127 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useSupabaseClient, useSupabaseUser } from '#imports'
+import type { Database } from '~/types/database.types'
 import MobileNav from '~/protected/components/dashboard/navigation/MobileNav.vue'
 import DashboardIcon from '~/protected/components/dashboard/icons/DashboardIcon.vue'
 import WebsiteIcon from '~/protected/components/dashboard/icons/WebsiteIcon.vue'
 import SupportIcon from '~/protected/components/dashboard/icons/SupportIcon.vue'
 import BillingIcon from '~/protected/components/dashboard/icons/BillingIcon.vue'
+import AdminIcon from '~/protected/components/dashboard/icons/AdminIcon.vue'
+import UsersIcon from '~/protected/components/dashboard/icons/UsersIcon.vue'
+import EarningsIcon from '~/protected/components/dashboard/icons/EarningsIcon.vue'
+import InvitationsIcon from '~/protected/components/dashboard/icons/InvitationsIcon.vue'
 
 const route = useRoute()
 const isSidebarOpen = ref(false)
+const user = useSupabaseUser()
+const supabase = useSupabaseClient<Database>()
+
+// User role state
+const userRole = ref<'admin' | 'user' | null>(null)
+
+// Fetch user role
+const fetchUserRole = async () => {
+  if (!user.value) return
+
+  try {
+    // First try to get role from user metadata
+    const role = user.value.user_metadata?.role
+
+    if (role) {
+      userRole.value = role as 'admin' | 'user'
+      return
+    }
+
+    // If no role in metadata, check database
+    const { data, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.value.id)
+      .maybeSingle()
+
+    if (error) {
+      console.error('Error fetching user role:', error)
+      userRole.value = 'user' // Default to user on error
+      return
+    }
+
+    if (data) {
+      userRole.value = data.role as 'admin' | 'user'
+      
+      // Update user metadata for future checks
+      await supabase.auth.updateUser({
+        data: { role: data.role }
+      })
+    } else {
+      userRole.value = 'user'
+    }
+  } catch (e) {
+    console.error('Error in fetchUserRole:', e)
+    userRole.value = 'user'
+  }
+}
 
 // Navigation items with icons
-const navigationItems = [
-  {
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: DashboardIcon
-  },
-  {
-    name: 'Website Overview',
-    to: '/dashboard/website-overview',
-    icon: WebsiteIcon
-  },
-  {
-    name: 'Billing',
-    to: '/dashboard/billing',
-    icon: BillingIcon
-  },
-  {
-    name: 'Support',
-    to: '/dashboard/support',
-    icon: SupportIcon
-  },
-]
+const navigationItems = computed(() => {
+  // Admin navigation items
+  if (userRole.value === 'admin') {
+    return [
+      {
+        name: 'Dashboard',
+        to: '/dashboard/admin',
+        icon: DashboardIcon
+      },
+      {
+        name: 'Earnings',
+        to: '/dashboard/admin/earnings',
+        icon: EarningsIcon
+      },
+      {
+        name: 'Users',
+        to: '/dashboard/admin/users',
+        icon: UsersIcon
+      },
+      {
+        name: 'Invitations',
+        to: '/dashboard/admin/invitations',
+        icon: InvitationsIcon
+      },
+      {
+        name: 'User Dashboard',
+        to: '/dashboard',
+        icon: WebsiteIcon
+      }
+    ]
+  }
+
+  // User navigation items
+  return [
+    {
+      name: 'Dashboard',
+      to: '/dashboard',
+      icon: DashboardIcon
+    },
+    {
+      name: 'Website Overview',
+      to: '/dashboard/website-overview',
+      icon: WebsiteIcon
+    },
+    {
+      name: 'Billing',
+      to: '/dashboard/billing',
+      icon: BillingIcon
+    },
+    {
+      name: 'Support',
+      to: '/dashboard/support',
+      icon: SupportIcon
+    }
+  ]
+})
 
 // Check if route is current
 function isCurrentRoute(path: string) {
@@ -123,5 +210,15 @@ function isCurrentRoute(path: string) {
 // Close sidebar on route change on mobile
 watch(route, () => {
   isSidebarOpen.value = false
+})
+
+// Fetch user role on mount
+onMounted(() => {
+  fetchUserRole()
+})
+
+// Watch for user changes
+watch(user, () => {
+  fetchUserRole()
 })
 </script>

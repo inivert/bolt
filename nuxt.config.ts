@@ -25,6 +25,18 @@ export default defineNuxtConfig({
         '/dashboard/billing',
         // Add other routes you want to prerender
       ]
+    },
+    routeRules: {
+      '/**': {
+        headers: {
+          'X-Frame-Options': 'SAMEORIGIN',
+          'X-Content-Type-Options': 'nosniff',
+          'X-XSS-Protection': '1; mode=block',
+          'Referrer-Policy': 'strict-origin-when-cross-origin',
+          'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co;"
+        }
+      }
     }
   },
   routeRules: {
@@ -72,7 +84,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
-      exclude: ['/', '/register', '/login', '/confirm', '/reset-password', '/features', '/pricing', '/how-it-works', '/about', '/blog', '/contact', '/privacy', '/terms', '/consultation']
+      exclude: ['/', '/register', '/login', '/confirm', '/forgot-password', '/update-password', '/features', '/pricing', '/how-it-works', '/about', '/blog', '/contact', '/privacy', '/terms', '/consultation']
     },
     cookieOptions: {
       maxAge: COOKIE_MAX_AGE_SECONDS,
@@ -120,6 +132,11 @@ export default defineNuxtConfig({
           name: 'dashboard-billing',
           path: '/dashboard/billing',
           file: resolve(__dirname, './protected/pages/dashboard/billing/index.vue')
+        },
+        {
+          name: 'dashboard-admin',
+          path: '/dashboard/admin',
+          file: resolve(__dirname, './protected/pages/dashboard/admin/index.vue')
         }
       ]
 
@@ -168,6 +185,11 @@ export default defineNuxtConfig({
     n8nWebhookPath: process.env.N8N_WEBHOOK_PATH,
     public: {
       // ... other public config ...
+    }
+  },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => ['suspense'].includes(tag)
     }
   },
 })

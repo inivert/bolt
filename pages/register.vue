@@ -25,23 +25,56 @@ const handleRegister = async () => {
     loading.value = true
     error.value = ''
 
-    const { error: authError } = await supabase.auth.signUp({
+    console.log('Attempting registration with:', {
+      email: email.value,
+      name: name.value
+    })
+
+    const { data, error: authError } = await supabase.auth.signUp({
       email: email.value,
       password: password.value,
       options: {
         data: {
-          name: name.value
+          name: name.value,
+          role: 'user'
         }
       }
     })
 
-    if (authError) { throw authError }
+    console.log('Supabase response:', data)
+
+    if (authError) {
+      console.error('Supabase auth error:', {
+        message: authError.message,
+        status: authError.status
+      })
+      
+      // Check for specific database errors
+      if (authError.message.includes('Database error')) {
+        throw new Error('Registration failed: Database configuration issue. Please contact support.')
+      }
+      
+      throw new Error(`Registration failed: ${authError.message}`)
+    }
+
+    if (!data.user) {
+      throw new Error('Registration failed: No user data returned')
+    }
+
+    // Handle email confirmation requirement
+    if (data.user.identities?.length === 0) {
+      navigateTo('/verify-email')
+      return
+    }
 
     // Redirect to get-started page after successful registration
     navigateTo('/get-started')
   } catch (e) {
+    console.error('Registration error:', e)
     const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred'
-    error.value = errorMessage
+    error.value = errorMessage.includes('Registration failed') 
+      ? errorMessage
+      : 'Registration failed. Please try again later.'
   } finally {
     loading.value = false
   }
@@ -76,6 +109,7 @@ const handleRegister = async () => {
                 name="name"
                 type="text"
                 required
+                autocomplete="name"
                 class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl
                        placeholder-gray-400 transition-all duration-200 ease-in-out
                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
@@ -97,6 +131,7 @@ const handleRegister = async () => {
                 name="email"
                 type="email"
                 required
+                autocomplete="username"
                 class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl
                        placeholder-gray-400 transition-all duration-200 ease-in-out
                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
@@ -118,6 +153,7 @@ const handleRegister = async () => {
                 name="password"
                 type="password"
                 required
+                autocomplete="new-password"
                 class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl
                        placeholder-gray-400 transition-all duration-200 ease-in-out
                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
@@ -139,6 +175,7 @@ const handleRegister = async () => {
                 name="confirmPassword"
                 type="password"
                 required
+                autocomplete="new-password"
                 class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-xl
                        placeholder-gray-400 transition-all duration-200 ease-in-out
                        focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent

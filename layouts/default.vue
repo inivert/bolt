@@ -201,8 +201,10 @@
 import { ref } from 'vue'
 
 const navLinks = [
+  { to: '/features', text: 'Features' },
+  { to: '/pricing', text: 'Pricing' },
   { to: '/how-it-works', text: 'Our Process' },
-  { to: '/consultation', text: 'Consultation' }
+  { to: '/contact', text: 'Contact' }
 ]
 import type { AuthError } from '@supabase/supabase-js'
 import { useSupabaseClient, useSupabaseUser } from '#imports'
